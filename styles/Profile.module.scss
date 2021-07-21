@@ -1,0 +1,15 @@
+.profileSelfContainer {
+  width: 85%;
+  min-height: 100vh;
+  height: 100vh;
+  padding: 1rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+
+  .profileSelfContainer__col1,
+  .profileSelfContainer__col2 {
+    width: 50%;
+    height: 100%;
+  }
+}
