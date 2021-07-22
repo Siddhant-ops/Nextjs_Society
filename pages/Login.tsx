@@ -6,8 +6,6 @@ import {
   useState,
 } from "react";
 import Image from "next/image";
-import { useStateValue } from "../Utils/AuthContext/stateProvider";
-import { login, loginStateType, userInfoType } from "../Utils/Helpers/auth";
 import {
   SnackbarCloseReason,
   Button,
@@ -20,7 +18,7 @@ import styles from "../styles/Login.module.scss";
 
 const Login = () => {
   // Get current user
-  const [{ user }, dispatch] = useStateValue();
+  // const [{ user }, dispatch] = useStateValue();
 
   // loginDetails
   const [userLoginInfo, setUserLoginInfo] = useState({
@@ -30,28 +28,28 @@ const Login = () => {
   });
 
   // Alert Config
-  const [loginState, setLoginState] = useState<loginStateType>({
+  const [loginState, setLoginState] = useState({
     visible: false,
     severity: "info",
     message: "",
   });
 
   // Login func
-  const submitForm = (userInfo: userInfoType) => {
-    // const data = {
-    //   username: "hudsud",
-    //   email: "me@google.com",
-    //   password: "Siddhandihayf$6678knn",
-    // };
-    const res = login(userInfo, setLoginState, dispatch);
-  };
+  // const submitForm = (userInfo: userInfoType) => {
+  //   // const data = {
+  //   //   username: "hudsud",
+  //   //   email: "me@google.com",
+  //   //   password: "Siddhandihayf$6678knn",
+  //   // };
+  //   const res = login(userInfo, setLoginState, dispatch);
+  // };
 
   // Disable Login Btn untill all fields are filled
-  function disableLoginBtn(userInfo: userInfoType): boolean {
-    const { username, email, password } = userInfo;
-    if ((username && email && password) === "") return true;
-    else return false;
-  }
+  // function disableLoginBtn(userInfo: userInfoType): boolean {
+  //   const { username, email, password } = userInfo;
+  //   if ((username && email && password) === "") return true;
+  //   else return false;
+  // }
 
   // Clear form after submission
   function clearForm() {
@@ -68,7 +66,6 @@ const Login = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              submitForm(userLoginInfo);
             }}
           >
             <h2>
@@ -117,9 +114,7 @@ const Login = () => {
             />
             <a href="https://google.com">Forgot password</a>
             <ButtonGroup fullWidth={true} variant="text" color="primary">
-              <Button disabled={disableLoginBtn(userLoginInfo)} type="submit">
-                Login
-              </Button>
+              <Button type="submit">Login</Button>
               <Button
                 onClick={() => {
                   clearForm();
@@ -133,37 +128,37 @@ const Login = () => {
           </form>
         </div>
       </div>
-      {showToast(loginState, setLoginState)}
+      {/* {showToast(loginState, setLoginState)} */}
     </Fragment>
   );
 };
 
 export default Login;
 
-function showToast(
-  loginState: loginStateType,
-  setLoginState: Dispatch<SetStateAction<loginStateType>>
-) {
-  function closeToast(
-    event: SyntheticEvent<any, Event>,
-    reason?: SnackbarCloseReason
-  ) {
-    setLoginState({
-      visible: false,
-      severity: "info",
-      message: "",
-    });
-  }
+// function showToast(
+//   loginState: loginStateType,
+//   setLoginState: Dispatch<SetStateAction<loginStateType>>
+// ) {
+//   function closeToast(
+//     event: SyntheticEvent<any, Event>,
+//     reason?: SnackbarCloseReason
+//   ) {
+//     setLoginState({
+//       visible: false,
+//       severity: "info",
+//       message: "",
+//     });
+//   }
 
-  return (
-    <Snackbar
-      open={loginState.visible}
-      autoHideDuration={5000}
-      onClose={closeToast}
-    >
-      <Alert onClose={closeToast} severity={loginState.severity}>
-        {loginState.message}
-      </Alert>
-    </Snackbar>
-  );
-}
+//   return (
+//     <Snackbar
+//       open={loginState.visible}
+//       autoHideDuration={5000}
+//       onClose={closeToast}
+//     >
+//       <Alert onClose={closeToast} severity={loginState.severity}>
+//         {loginState.message}
+//       </Alert>
+//     </Snackbar>
+//   );
+// }

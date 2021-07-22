@@ -4,12 +4,11 @@ import styles from "./Navbar.module.scss";
 import { IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Fragment, FunctionComponent } from "react";
-import { parseJwt } from "../Helpers/auth";
-import { useStateValue } from "../AuthContext/stateProvider";
+import { useAuth } from "../Firebase/Auth/auth";
 
 const Navbar: FunctionComponent = () => {
   const router = useRouter();
-  const [{ user }] = useStateValue();
+  const auth = useAuth();
 
   return (
     <nav className={styles.nav}>
@@ -46,12 +45,12 @@ const Navbar: FunctionComponent = () => {
             </a>
           </Link>
         </li>
-        {user ? (
+        {auth?.user ? (
           <li>
-            <Link href={`/Profile/${parseJwt(user)?.username}`}>
+            <Link href={`/Profile/${auth?.user?.email}}`}>
               <a
                 className={
-                  router.pathname === `/Profile/${parseJwt(user)?.username}`
+                  router.pathname === `/Profile/${auth?.user?.email}}`
                     ? styles.active
                     : ""
                 }

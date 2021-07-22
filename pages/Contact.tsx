@@ -7,7 +7,7 @@ export default function Contact() {
   return (
     <Fragment>
       <h1>Hello Contact</h1>
-      {auth?.user}
+      <h1>{auth?.user?.email}</h1>
     </Fragment>
   );
 }
