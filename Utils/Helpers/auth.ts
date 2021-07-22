@@ -21,7 +21,7 @@ interface loginStateType {
 }
 
 // Token Name
-const tokenName = "next_society_token";
+const tokenName = "next_blog_token";
 
 // Parse JWT and get user Obj
 function parseJwt(token: string): {

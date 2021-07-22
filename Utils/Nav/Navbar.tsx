@@ -17,7 +17,7 @@ const Navbar: FunctionComponent = () => {
         <Link href="/">
           <a>
             <div className={styles.navLogoBox}>
-              <h4>TB</h4>
+              <h4>SM</h4>
             </div>
           </a>
         </Link>

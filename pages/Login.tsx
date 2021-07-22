@@ -49,8 +49,9 @@ const Login = () => {
   // Disable Login Btn untill all fields are filled
   function disableLoginBtn(userInfo: userInfoType): boolean {
     const { username, email, password } = userInfo;
-    if ((username && email && password) === "") return true;
-    else return false;
+    if ((username && email && password) === "") {
+      return true;
+    } else return false;
   }
 
   // Clear form after submission

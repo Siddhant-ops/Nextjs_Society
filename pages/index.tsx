@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -64,11 +64,11 @@ export default function Home({ res }) {
   return (
     <Fragment>
       <Head>
-        <title>The BLOG</title>
+        <title>Society Manager</title>
       </Head>
       <div className={styles.container}>
         <Toolbar id="back-to-top-anchor" />
-        <h1 className={styles.title}>The Blog</h1>
+        <h1 className={styles.title}>Society Manager</h1>
         <h1>Featured Article</h1>
         <div className={styles.HeroCard}>
           <div className={styles.HeroCardImageContainer}>
@@ -104,9 +104,7 @@ export default function Home({ res }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+export const getStaticProps: GetStaticProps = async (context: object) => {
   const res: object = await fetch(
     "https://jsonplaceholder.typicode.com/posts/"
   ).then((resp) => {

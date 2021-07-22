@@ -1,13 +1,10 @@
 import { Fragment } from "react";
-import { useAuth } from "../Utils/Firebase/Auth/auth";
+import Navbar from "../Utils/Nav/Navbar";
 
 export default function Contact() {
-  const auth = useAuth();
-
   return (
     <Fragment>
       <h1>Hello Contact</h1>
-      {auth?.user}
     </Fragment>
   );
 }
