@@ -1,25 +1,31 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import firebase from "firebase/app";
-import "firebase/auth";
 import { firebaseApp } from "../firebase";
-import { _signIn, _signOut, _signUp } from "./authHelpers";
+import { SetStateAction } from "react";
+import { dbConstants } from "../Constants";
 
 firebaseApp();
 
+export interface User {
+  user: firebase.User;
+  role: "SECRETARY" | "MEMBER" | "CMEMBER" | "SSTAFF" | "SECURITY";
+}
+
 interface contextInterface {
-  user: firebase.User | null;
+  userObj: User | null;
   userId: string | null;
-  signIn: (email: string, password: string) => Promise<firebase.User>;
-  signUp: (email: string, password: string) => Promise<firebase.User>;
-  signOut: () => void;
+  setUser?: Dispatch<SetStateAction<User | null>>;
 }
 
 const authContext = createContext<contextInterface>({
-  user: null,
+  userObj: null,
   userId: null,
-  signIn: _signIn,
-  signUp: _signUp,
-  signOut: _signOut,
 });
 
 export const ProvideAuth = ({ children }) => {
@@ -32,36 +38,22 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const [user, setUser] = useState<firebase.User | null>(null);
-
-  const signIn = (email: string, password: string) => {
-    return _signIn(email, password, setUser);
-  };
-
-  const signUp = (email: string, password: string) => {
-    return _signUp(email, password, setUser);
-  };
-
-  const signOut = () => {
-    _signOut(setUser);
-  };
+  const [userObject, setUserObject] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        setUser(user);
+        setUserObject({ user, role: "SECRETARY" });
       } else {
-        setUser(null);
+        setUserObject(null);
       }
     });
     return () => unsubscribe();
   }, []);
 
   return {
-    user,
-    userId: user && user.uid,
-    signIn,
-    signUp,
-    signOut,
+    userObj: userObject,
+    userId: userObject && userObject.user.uid,
+    setUserObject,
   };
 }

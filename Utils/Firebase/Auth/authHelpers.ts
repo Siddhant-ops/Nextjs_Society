@@ -1,57 +1,214 @@
 import { Dispatch, SetStateAction } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { dbConstants, roles } from "../Constants";
+import { AlertStateType } from "../../../Components/Alert/PopAlert";
+import { User } from "./auth";
+import {
+  v5 as uuidv5,
+  validate as uuidValidate,
+  version as uuidVersion,
+} from "uuid";
 
-// user signin
-const _signIn = async (
-  email: string,
-  password: string,
-  setUser?: Dispatch<SetStateAction<firebase.User | null>>
+// Secretary SignUp
+interface SignUp_Secretary {
+  name: string;
+  phoneNum: string;
+  email: string;
+  password: string;
+  societyFlatNum: string;
+  societyName: string;
+  societyId: string;
+  societyAddress: string;
+}
+
+const signUp_Secretary = async (
+  secretaryInfo: SignUp_Secretary,
+  setSignUpState: Dispatch<SetStateAction<AlertStateType>>,
+  setUser: Dispatch<SetStateAction<User | null>>
 ) => {
-  var response: firebase.User | null = null;
-  await firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((authResp) => {
-      if (authResp) {
-        response = authResp.user;
-        setUser(response);
-      }
-    })
-    .catch((err) => {
-      if (err) throw err;
-    });
-  return response;
+  const userData = secretaryInfo;
+  // Firstly authenticate User
+  try {
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(userData?.email, userData?.password)
+      .then((firebaseAuthResp) => {
+        if (firebaseAuthResp) {
+          //   Getting secretary user
+          const secUser = firebaseAuthResp?.user;
+          // Set secretary display name
+          secUser
+            .updateProfile({
+              displayName: userData?.name,
+            })
+            .then(() => {
+              // ////////////////
+              // set society data
+              const societyDocRef = firebase
+                .firestore()
+                .collection(dbConstants?.societyCollection)
+                .doc(userData?.societyName);
+              // creating a uuid
+              const socUUID = uuidv5(
+                userData?.societyName,
+                process.env.NEXT_PUBLIC_NAMESPACE
+              );
+              societyDocRef
+                .set({
+                  societyId: userData?.societyId,
+                  societyName: userData?.societyName,
+                  societyAddress: userData?.societyAddress,
+                  users: [{ id: secUser?.uid, role: roles?.secretary }],
+                  referralCode: socUUID,
+                })
+                .then(() => {
+                  // //////////////////////////////////////////////////////
+                  // Seeting first member of society in subcollection users
+                  const secretaryDocRef = societyDocRef
+                    .collection(dbConstants?.userSubCollection)
+                    .doc(userData?.name);
+                  // set secretary data
+                  secretaryDocRef
+                    .set({
+                      userName: userData?.name,
+                      userEmail: userData?.email,
+                      userRole: roles?.secretary,
+                      userPhoneNum: userData?.phoneNum,
+                      societyFlatNum: userData?.societyFlatNum,
+                      accountCreated: firebase.firestore.Timestamp,
+                    })
+                    .then(() => {
+                      // ///////////////////////////////
+                      // setting user in Colelction user
+                      const usersDocRef = firebase
+                        .firestore()
+                        .collection(dbConstants?.usersCollection)
+                        .doc(secUser?.email);
+                      usersDocRef
+                        .set({
+                          info: {
+                            userId: secUser?.uid,
+                            role: roles?.secretary,
+                            societyDocId: userData?.societyName,
+                          },
+                        })
+                        .then(() => {
+                          // setting user
+                          setUser({ user: secUser, role: "SECRETARY" });
+                          setSignUpState({
+                            severity: "success",
+                            message: "Successful SignUp",
+                            visible: true,
+                          });
+                        });
+                    });
+                });
+            });
+        }
+      });
+  } catch (err) {
+    if (err) {
+      setSignUpState({
+        severity: "error",
+        message: err?.message,
+        visible: true,
+      });
+    }
+  }
 };
 
-// user signup
-const _signUp = async (
-  email: string,
-  password: string,
-  setUser?: Dispatch<SetStateAction<firebase.User | null>>
+// Member SignUp
+
+interface SignUp_Member {
+  name: string;
+  phoneNum: string;
+  email: string;
+  password: string;
+  societyFlatNum: string;
+  referralCode: string;
+}
+
+const signUp_Member = async (
+  memberInfo: SignUp_Member,
+  setSignUpState: Dispatch<SetStateAction<AlertStateType>>,
+  setUser: Dispatch<SetStateAction<User | null>>
 ) => {
-  var response: firebase.User | null = null;
-  await firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then((authResp) => {
-      if (authResp) {
-        response = authResp.user;
-        setUser(response);
-      }
-    })
-    .catch((err) => {
-      if (err) throw err;
-    });
-  return response;
+  const userData = memberInfo;
+
+  try {
+    // checking if the referralCode is true or not
+    if (
+      uuidValidate(userData?.referralCode) &&
+      uuidVersion(userData?.referralCode) === 5
+    ) {
+      firebase
+        .firestore()
+        .collection(dbConstants.societyCollection)
+        .onSnapshot((snaphsot) => {
+          if (snaphsot) {
+            // getting all docs within collection society
+            const docs = snaphsot.docs;
+            // checking for every doc
+            docs.forEach((doc) => {
+              // creating reference of doc
+              const societyDocRef = firebase
+                .firestore()
+                .collection(dbConstants.societyCollection)
+                .doc(doc.id);
+              // getting data from doc
+              societyDocRef.get().then((docResp) => {
+                const docData = docResp.data();
+                // matching referralcode
+                if (
+                  docData &&
+                  docData[dbConstants?.referralCode] === userData?.referralCode
+                ) {
+                  // getting user signed up
+                  firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(
+                      userData?.email,
+                      userData?.password
+                    )
+                    .then((firebaseAuthResponse) => {
+                      if (firebaseAuthResponse) {
+                        const memberUser = firebaseAuthResponse?.user;
+                        // updating user displayName
+                        memberUser
+                          .updateProfile({ displayName: userData?.name })
+                          .then(() => {
+                            // further database logic of saving
+                          });
+                      }
+                    });
+                } else {
+                  setSignUpState({
+                    severity: "error",
+                    message: "Invalid referralCode",
+                    visible: true,
+                  });
+                }
+              });
+            });
+          }
+        });
+    } else {
+      setSignUpState({
+        severity: "error",
+        message: "Invalid referralCode",
+        visible: true,
+      });
+    }
+  } catch (err) {
+    if (err) {
+      setSignUpState({
+        severity: "error",
+        message: err?.message,
+        visible: true,
+      });
+    }
+  }
 };
 
-// user signOut
-const _signOut = async (
-  setUser?: Dispatch<SetStateAction<firebase.User | null>>
-) => {
-  await firebase.auth().signOut();
-  setUser(null);
-};
-
-export { _signIn, _signUp, _signOut };
+export { signUp_Secretary };

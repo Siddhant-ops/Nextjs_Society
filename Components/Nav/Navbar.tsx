@@ -4,7 +4,7 @@ import styles from "./Navbar.module.scss";
 import { IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Fragment, FunctionComponent } from "react";
-import { useAuth } from "../Firebase/Auth/auth";
+import { useAuth } from "../../Utils/Firebase/Auth/auth";
 
 const Navbar: FunctionComponent = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const Navbar: FunctionComponent = () => {
         <Link href="/">
           <a>
             <div className={styles.navLogoBox}>
-              <h4>TB</h4>
+              <h4>SM</h4>
             </div>
           </a>
         </Link>
@@ -45,12 +45,12 @@ const Navbar: FunctionComponent = () => {
             </a>
           </Link>
         </li>
-        {auth?.user ? (
+        {auth?.userObj ? (
           <li>
-            <Link href={`/Profile/${auth?.user?.email}}`}>
+            <Link href={`/Profile/${auth?.userObj?.user?.email}}`}>
               <a
                 className={
-                  router.pathname === `/Profile/${auth?.user?.email}}`
+                  router.pathname === `/Profile/${auth?.userObj?.user?.email}}`
                     ? styles.active
                     : ""
                 }
@@ -71,8 +71,14 @@ const Navbar: FunctionComponent = () => {
               </Link>
             </li>
             <li>
-              <Link href="/Sign-up">
-                <a>Sign-up</a>
+              <Link href="/SignUp">
+                <a
+                  className={
+                    router.pathname.includes("/SignUp") ? styles.active : ""
+                  }
+                >
+                  Sign-up
+                </a>
               </Link>
             </li>
           </Fragment>

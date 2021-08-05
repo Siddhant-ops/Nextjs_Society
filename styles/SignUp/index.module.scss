@@ -1,0 +1,69 @@
+.container {
+  min-height: 90vh;
+  height: 90vh;
+  width: 90vw;
+  margin: 0 auto;
+  padding: 1rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  .mainCol1,
+  .mainCol2,
+  .mainCol3 {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+
+    .link_btn {
+      padding: 0.5rem 0.7rem;
+      background: rgba(93, 93, 207, 0.548);
+      font-size: 1.3rem;
+      border-radius: 10px;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      -ms-border-radius: 10px;
+      -o-border-radius: 10px;
+    }
+
+    h1,
+    h3,
+    h4,
+    h5 {
+      margin: 0;
+    }
+  }
+
+  .mainCol1,
+  .mainCol2 {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .mainCol3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .infoBox {
+      width: 60%;
+      padding: 1rem;
+      border: 1px solid #585858;
+      border-radius: 10px;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      -ms-border-radius: 10px;
+      -o-border-radius: 10px;
+    }
+  }
+}

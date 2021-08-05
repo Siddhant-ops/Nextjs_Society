@@ -1,0 +1,60 @@
+$bg-black: #292929;
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+
+  .title {
+    font-size: 8rem;
+  }
+
+  & > hr {
+    margin: 1rem 0;
+  }
+}
+
+.flexDiv {
+  width: 80%;
+  margin: 0 auto;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .noticeBox,
+  .calendarBox {
+    min-height: 50vh;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    box-shadow: 0 8px 24px 0 rgba(31, 38, 135, 0.37);
+    padding: 1rem;
+    & > h4 {
+      margin: 0;
+    }
+
+    & > hr {
+      background: $bg-black;
+    }
+  }
+
+  .noticeBox {
+    flex: 1 0;
+  }
+
+  .calendarBox {
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .container {
+    padding: 1rem;
+
+    .title {
+      font-size: 4rem;
+    }
+  }
+}

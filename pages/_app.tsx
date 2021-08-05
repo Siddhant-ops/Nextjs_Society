@@ -1,6 +1,6 @@
 import "../styles/globals.scss";
 import { ProvideAuth } from "../Utils/Firebase/Auth/auth";
-import Navbar from "../Utils/Nav/Navbar";
+import Navbar from "../Components/Nav/Navbar";
 
 function MyApp({ Component, pageProps }) {
   return (
