@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import styles from "./Navbar.module.scss";
+import Image from "next/image";
+import styles from "../../styles/Navbar.module.scss";
 import { IconButton } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 import { Fragment, FunctionComponent } from "react";
 import { useAuth } from "../../Utils/Firebase/Auth/auth";
+import CircleOutlinedIcon from "@material-ui/icons/CircleOutlined";
 
 const Navbar: FunctionComponent = () => {
   const router = useRouter();
@@ -12,78 +13,80 @@ const Navbar: FunctionComponent = () => {
 
   return (
     <nav className={styles.nav}>
-      <div className={styles.navWrapper}>
-        <Link href="/">
-          <a>
-            <div className={styles.navLogoBox}>
-              <h4>SM</h4>
-            </div>
-          </a>
-        </Link>
-        <IconButton
-          onClick={() => {
-            document.querySelector("#navUl").classList.toggle(styles.ulOpen);
-          }}
-          color="secondary"
-          className={styles.Menu}
-        >
-          <MenuIcon color="secondary" />
-        </IconButton>
-      </div>
-      <ul id="navUl">
-        <li>
-          <Link href="/Explore">
-            <a className={router.pathname == "/Explore" ? styles.active : ""}>
-              Explore
+      <div className={styles.navContainer}>
+        <div className={styles.navWrapper}>
+          <Link href="/">
+            <a className={styles.navLogoBox}>
+              <Image src="/logo_1.png" layout="fill" objectFit="contain" />
             </a>
           </Link>
-        </li>
-        <li>
-          <Link href="/Contact">
-            <a className={router.pathname == "/Contact" ? styles.active : ""}>
-              Contact
-            </a>
-          </Link>
-        </li>
-        {auth?.userObj ? (
+          <IconButton
+            onClick={() => {
+              document.querySelector("#navUl").classList.toggle(styles.ulOpen);
+            }}
+            className={styles.Menu}
+          >
+            <CircleOutlinedIcon />
+          </IconButton>
+        </div>
+        <ul id="navUl">
           <li>
-            <Link href={`/Profile/${auth?.userObj?.user?.email}}`}>
-              <a
-                className={
-                  router.pathname === `/Profile/${auth?.userObj?.user?.email}}`
-                    ? styles.active
-                    : ""
-                }
-              >
-                Profile
+            <Link href="/About">
+              <a className={router.pathname == "/About" ? styles.active : ""}>
+                <h5>About</h5>
               </a>
             </Link>
           </li>
-        ) : (
-          <Fragment>
+          <li>
+            <Link href="/Contact">
+              <a className={router.pathname == "/Contact" ? styles.active : ""}>
+                <h5>Contact</h5>
+              </a>
+            </Link>
+          </li>
+          {auth?.userObj ? (
             <li>
-              <Link href="/Login">
-                <a
-                  className={router.pathname === "/Login" ? styles.active : ""}
-                >
-                  Login
-                </a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/SignUp">
+              <Link href={`/Profile/${auth?.userObj?.user?.email}}`}>
                 <a
                   className={
-                    router.pathname.includes("/SignUp") ? styles.active : ""
+                    router.pathname ===
+                    `/Profile/${auth?.userObj?.user?.email}}`
+                      ? styles.active
+                      : ""
                   }
                 >
-                  Sign-up
+                  <h5>Profile</h5>
                 </a>
               </Link>
             </li>
-          </Fragment>
-        )}
-      </ul>
+          ) : (
+            <Fragment>
+              <li>
+                <Link href="/Login">
+                  <a
+                    className={
+                      router.pathname === "/Login" ? styles.active : ""
+                    }
+                  >
+                    <h5>Login</h5>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/SignUp">
+                  <a
+                    className={
+                      router.pathname.includes("/SignUp") ? styles.active : ""
+                    }
+                  >
+                    <h5>Sign-up</h5>
+                  </a>
+                </Link>
+              </li>
+            </Fragment>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 };

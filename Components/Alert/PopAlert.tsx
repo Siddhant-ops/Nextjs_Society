@@ -30,6 +30,7 @@ const PopAlert = (
   return (
     <Snackbar
       open={alertState.visible}
+      anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
       autoHideDuration={5000}
       onClose={closeToast}
     >

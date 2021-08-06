@@ -1,8 +1,10 @@
 import {
   createContext,
   Dispatch,
+  MutableRefObject,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import firebase from "firebase/app";
@@ -20,7 +22,6 @@ export interface User {
 interface contextInterface {
   userObj: User | null;
   userId: string | null;
-  setUser?: Dispatch<SetStateAction<User | null>>;
 }
 
 const authContext = createContext<contextInterface>({
@@ -41,19 +42,35 @@ function useProvideAuth() {
   const [userObject, setUserObject] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log(user, new Date());
+
       if (user) {
-        setUserObject({ user, role: "SECRETARY" });
+        firebase
+          .firestore()
+          .collection(dbConstants?.usersCollection)
+          .doc(user?.email)
+          .get()
+          .then((docData) => {
+            if (docData.exists) {
+              const userData = docData.data();
+              setUserObject({
+                user,
+                role: userData?.role,
+              });
+            }
+          })
+          .catch((err) => {
+            console.warn("some error occured", err);
+          });
       } else {
         setUserObject(null);
       }
     });
-    return () => unsubscribe();
   }, []);
 
   return {
     userObj: userObject,
-    userId: userObject && userObject.user.uid,
-    setUserObject,
+    userId: userObject.user && userObject.user.uid,
   };
 }

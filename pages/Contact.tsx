@@ -1,38 +1,119 @@
-import { Fragment } from "react";
-import { useAuth } from "../Utils/Firebase/Auth/auth";
-import firebase from "firebase/app";
-import "firebase/firestore";
-import { dbConstants } from "../Utils/Firebase/Constants";
-import { v5 } from "uuid";
+import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
+import styles from "../styles/Contact.module.scss";
+import Image from "next/image";
+import { Fragment, useState } from "react";
+import { Button, TextareaAutosize, TextField } from "@material-ui/core";
+import Head from "next/head";
+import SendIcon from "@material-ui/icons/Send";
 
 export default function Contact() {
-  const auth = useAuth();
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    details: "",
+  });
+
+  const [contactFormState, setContactFormState] = useState<AlertStateType>({
+    message: "",
+    severity: "info",
+    visible: false,
+  });
+
+  function disableLoginBtn(): boolean {
+    const { name, email, subject, details } = contactForm;
+    if ((name && email && subject && details) === "") return true;
+    else return false;
+  }
 
   return (
     <Fragment>
-      <h1>Hello Contact</h1>
-      <h1>{auth?.userObj?.user?.email}</h1>
-      {/* <button
-        onClick={() => {
-          auth?.signUp("siddhantdalvi3@gmail.com", "something123");
-        }}
-      >
-        SignUp
-      </button> */}
-      {/* <button
-        onClick={() => {
-          _signIn("siddhantdalvi3@gmail.com", "something123", auth?.setUser);
-        }}
-      >
-        Signin
-      </button>
-      <button
-        onClick={() => {
-          _signOut();
-        }}
-      >
-        Signout
-      </button> */}
+      <Head>
+        <title>Society Manager - Contact</title>
+      </Head>
+      <div className={styles.container}>
+        <div className={styles.imgContainer}>
+          <Image
+            src="/static/Images/ContactImg.png"
+            layout="fill"
+            objectFit="contain"
+          />
+        </div>
+        <div className={styles.formContainer}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <h1>Contact</h1>
+            <TextField
+              className={styles.formInput}
+              onChange={(e) => {
+                setContactForm((prevContactForm) => {
+                  return { ...prevContactForm, name: e.target.value };
+                });
+              }}
+              value={contactForm?.name}
+              required
+              fullWidth
+              variant="outlined"
+              label="Name"
+              type="text"
+            />
+            <TextField
+              className={styles.formInput}
+              onChange={(e) => {
+                setContactForm((prevContactForm) => {
+                  return { ...prevContactForm, email: e.target.value };
+                });
+              }}
+              value={contactForm?.email}
+              required
+              fullWidth
+              variant="outlined"
+              label="Email"
+              type="email"
+            />
+            <TextField
+              className={styles.formInput}
+              onChange={(e) => {
+                setContactForm((prevContactForm) => {
+                  return { ...prevContactForm, subject: e.target.value };
+                });
+              }}
+              value={contactForm?.subject}
+              required
+              fullWidth
+              variant="outlined"
+              label="Subject"
+              type="text"
+            />
+            <TextareaAutosize
+              onChange={(e) => {
+                setContactForm((prevContactForm) => {
+                  return { ...prevContactForm, details: e.target.value };
+                });
+              }}
+              value={contactForm?.details}
+              required
+              placeholder="Society Address *"
+              minRows={4}
+              maxRows={10}
+              className={styles.form__textArea}
+            />
+            <Button
+              className={styles.brandBtn}
+              type="submit"
+              variant="outlined"
+              disabled={disableLoginBtn()}
+              endIcon={<SendIcon />}
+            >
+              Send
+            </Button>
+          </form>
+        </div>
+      </div>
+      {PopAlert(contactFormState, setContactFormState)}
     </Fragment>
   );
 }

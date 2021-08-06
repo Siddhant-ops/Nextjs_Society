@@ -17,12 +17,12 @@ const Home_UserFalse = () => {
         <h1>Featured Articles</h1>
         <div className={styles.HeroCard}>
           <div className={styles.HeroCardImageContainer}>
-            <Image
+            {/* <Image
               className={styles.HeroCardImage}
               src={getImagePath()}
               layout="fill"
               objectFit="fill"
-            />
+            /> */}
           </div>
           <div className={styles.HeroCardContent}>
             {/* {quoteArray.map((quote, index) => {

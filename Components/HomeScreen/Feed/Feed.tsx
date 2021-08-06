@@ -1,9 +1,4 @@
-interface Props {
-  quote: string;
-}
-
-const Feed = (props: Props) => {
-  const { quote } = props;
+const Feed = () => {
   return <div></div>;
 };
 

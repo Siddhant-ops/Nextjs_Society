@@ -1,8 +1,9 @@
 import { Fragment, useState } from "react";
 import Image from "next/image";
-import { Button, TextField, ButtonGroup } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import styles from "../styles/Login.module.scss";
 import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
+import Head from "next/head";
 
 const Login = () => {
   // loginDetails
@@ -32,10 +33,13 @@ const Login = () => {
 
   return (
     <Fragment>
+      <Head>
+        <title>Society Manager - Login</title>
+      </Head>
       <div className={styles.container}>
         <div className={styles.imgContainer}>
           <Image
-            src="/static/Images/Components/Login/Login.svg"
+            src="/static/Images/LoginImg.png"
             layout="fill"
             objectFit="cover"
           />
@@ -46,12 +50,9 @@ const Login = () => {
               e.preventDefault();
             }}
           >
-            <h2>
-              Hey there,
-              <br />
-              just checking if it's really <span>you</span>
-            </h2>
+            <h1>login</h1>
             <TextField
+              className={styles.formInput}
               onChange={(e) => {
                 setUserLoginInfo((prevUserLoginInfo) => {
                   return { ...prevUserLoginInfo, email: e.target.value };
@@ -65,6 +66,7 @@ const Login = () => {
               type="email"
             />
             <TextField
+              className={styles.formInput}
               onChange={(e) => {
                 setUserLoginInfo((prevUserLoginInfo) => {
                   return { ...prevUserLoginInfo, password: e.target.value };
@@ -77,21 +79,17 @@ const Login = () => {
               label="Password"
               type="password"
             />
-            <Button variant="outlined" color="secondary">
-              Forgot Password
+            <h5>
+              Have you forgotten your <span>password?</span>
+            </h5>
+            <Button
+              className={styles.brandBtn}
+              type="submit"
+              variant="outlined"
+              disabled={disableLoginBtn()}
+            >
+              Log in
             </Button>
-            <ButtonGroup fullWidth={true} variant="text" color="primary">
-              <Button type="submit">Login</Button>
-              <Button
-                onClick={() => {
-                  clearForm();
-                }}
-                type="reset"
-                color="secondary"
-              >
-                Clear form
-              </Button>
-            </ButtonGroup>
           </form>
         </div>
       </div>

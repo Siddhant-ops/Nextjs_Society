@@ -4,13 +4,7 @@ import styles from "../../styles/Home/Home_UserTrue.module.scss";
 import Calendar from "./Calendar/Calendar";
 import Feed from "./Feed/Feed";
 
-interface Props {
-  quoteArray: Array<{ a: string; h: string; q: string }>;
-}
-
-const Home_UserTrue = (props: Props) => {
-  const { quoteArray } = props;
-
+const Home_UserTrue = () => {
   return (
     <Fragment>
       <Head>
@@ -25,7 +19,7 @@ const Home_UserTrue = (props: Props) => {
         <div className={styles.noticeBox}>
           <h4>Today's feed</h4>
           <hr />
-          <Feed quote={quoteArray[0].q} />
+          <Feed />
         </div>
         <div className={styles.calendarBox}>
           <h4>Calendar</h4>
