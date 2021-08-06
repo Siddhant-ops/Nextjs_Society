@@ -4,8 +4,12 @@ import { Button, TextField } from "@material-ui/core";
 import styles from "../styles/Login.module.scss";
 import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import Head from "next/head";
+import { login } from "../Utils/Firebase/Auth/authHelpers";
+import { useRouter } from "next/router";
 
 const Login = () => {
+  const router = useRouter();
+
   // loginDetails
   const [userLoginInfo, setUserLoginInfo] = useState({
     email: "",
@@ -48,6 +52,10 @@ const Login = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              login(userLoginInfo, setLoginState);
+              // setTimeout(() => {
+              //   router.push("/");
+              // }, 3000);
             }}
           >
             <h1>login</h1>

@@ -4,7 +4,7 @@ import "firebase/auth";
 import { dbConstants, roles } from "../Constants";
 import { AlertStateType } from "../../../Components/Alert/PopAlert";
 import { User } from "./auth";
-import Router, { NextRouter } from "next/router";
+import Router from "next/router";
 import {
   v5 as uuidv5,
   validate as uuidValidate,
@@ -25,8 +25,7 @@ interface SignUp_Secretary {
 
 const signUp_Secretary = async (
   secretaryInfo: SignUp_Secretary,
-  setSignUpState: Dispatch<SetStateAction<AlertStateType>>,
-  router: NextRouter
+  setSignUpState: Dispatch<SetStateAction<AlertStateType>>
 ) => {
   const userData = secretaryInfo;
   // Firstly authenticate User
@@ -97,9 +96,6 @@ const signUp_Secretary = async (
                           message: "Successful SignUp",
                           visible: true,
                         });
-                        // setTimeout(() => {
-                        //   router.push("/");
-                        // }, 3000);
                       })
                       .catch((err) => {
                         if (err) {
@@ -275,8 +271,7 @@ interface LoginInfo {
 
 const login = async (
   memberInfo: LoginInfo,
-  setSignUpState: Dispatch<SetStateAction<AlertStateType>>,
-  setUser: Dispatch<SetStateAction<User | null>>
+  setSignUpState: Dispatch<SetStateAction<AlertStateType>>
 ) => {
   const userData = memberInfo;
   try {
@@ -286,27 +281,35 @@ const login = async (
       .then((firebaseAuthResp) => {
         if (firebaseAuthResp && firebaseAuthResp?.user) {
           const firebaseUser = firebaseAuthResp?.user;
+          console.log(firebaseUser);
+
           firebase
             .firestore()
             .collection(dbConstants?.usersCollection)
             .doc(userData?.email)
-            .onSnapshot((snapshot) => {
-              if (snapshot.exists) {
-                const respData = snapshot.data();
-                setUser({ user: firebaseUser, role: respData?.role });
-                setSignUpState({
-                  severity: "success",
-                  message: "login sucessful",
-                  visible: true,
-                });
-              } else {
-                setSignUpState({
-                  severity: "info",
-                  message: "It looks like you aren't added to the group yet",
-                  visible: true,
-                });
+            .get()
+            .then((firestoreResp) => {
+              if (firestoreResp.exists) {
+                console.log("hello");
               }
             });
+          // .onSnapshot((snapshot) => {
+          //   console.log(snapshot);
+
+          //   if (snapshot.exists) {
+          //     setSignUpState({
+          //       severity: "success",
+          //       message: "login sucessful",
+          //       visible: true,
+          //     });
+          //   } else {
+          //     setSignUpState({
+          //       severity: "info",
+          //       message: "It looks like you aren't added to the group yet",
+          //       visible: true,
+          //     });
+          //   }
+          // });
         } else {
           setSignUpState({
             severity: "error",
@@ -326,4 +329,4 @@ const login = async (
   }
 };
 
-export { signUp_Secretary, signUp_Member };
+export { signUp_Secretary, signUp_Member, login };

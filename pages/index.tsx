@@ -5,13 +5,10 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { useEffect } from "react";
 import { useState } from "react";
+import { dbConstants } from "../Utils/Firebase/Constants";
 
 export default function Home() {
   const auth = useAuth();
 
-  firebase.auth().signOut();
-
-  if (auth?.userObj && auth?.userId) return <Home_UserTrue />;
-
-  return <Home_UserFalse />;
+  return <h1>Hello</h1>;
 }

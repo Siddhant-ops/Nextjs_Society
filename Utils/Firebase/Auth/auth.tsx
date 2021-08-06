@@ -11,6 +11,7 @@ import firebase from "firebase/app";
 import { firebaseApp } from "../firebase";
 import { SetStateAction } from "react";
 import { dbConstants } from "../Constants";
+import { Unsubscribe } from "@material-ui/icons";
 
 firebaseApp();
 
@@ -19,15 +20,7 @@ export interface User {
   role: "SECRETARY" | "MEMBER" | "CMEMBER" | "SSTAFF" | "SECURITY";
 }
 
-interface contextInterface {
-  userObj: User | null;
-  userId: string | null;
-}
-
-const authContext = createContext<contextInterface>({
-  userObj: null,
-  userId: null,
-});
+const authContext = createContext(null);
 
 export const ProvideAuth = ({ children }) => {
   const auth = useProvideAuth();
@@ -38,14 +31,30 @@ export const useAuth = () => {
   return useContext(authContext);
 };
 
+function getRole(user: firebase.User) {
+  return firebase
+    .firestore()
+    .collection(dbConstants?.usersCollection)
+    .doc(user?.email)
+    .get()
+    .then((docData) => {
+      if (docData.exists) {
+        const userData = docData.data();
+        return userData;
+      }
+    });
+}
+
 function useProvideAuth() {
   const [userObject, setUserObject] = useState<User | null>(null);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       console.log(user, new Date());
 
       if (user) {
+        console.log(getRole(user));
+
         firebase
           .firestore()
           .collection(dbConstants?.usersCollection)
@@ -67,10 +76,12 @@ function useProvideAuth() {
         setUserObject(null);
       }
     });
+    return unsubscribe();
   }, []);
 
   return {
     userObj: userObject,
-    userId: userObject.user && userObject.user.uid,
+    userId: userObject?.user && userObject.user.uid,
+    setUserObject,
   };
 }
