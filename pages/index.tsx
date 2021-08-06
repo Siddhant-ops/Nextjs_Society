@@ -10,5 +10,7 @@ import { dbConstants } from "../Utils/Firebase/Constants";
 export default function Home() {
   const auth = useAuth();
 
+  console.log(auth);
+
   return <h1>Hello</h1>;
 }
