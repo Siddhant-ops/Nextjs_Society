@@ -20,7 +20,15 @@ export interface User {
   role: "SECRETARY" | "MEMBER" | "CMEMBER" | "SSTAFF" | "SECURITY";
 }
 
-const authContext = createContext(null);
+interface Context {
+  userObj: User | null;
+  userId: string | null;
+}
+
+const authContext = createContext<Context>({
+  userObj: null,
+  userId: null,
+});
 
 export const ProvideAuth = ({ children }) => {
   const auth = useProvideAuth();
@@ -31,57 +39,38 @@ export const useAuth = () => {
   return useContext(authContext);
 };
 
-function getRole(user: firebase.User) {
-  return firebase
+async function getRole(user: firebase.User) {
+  const docData = await firebase
     .firestore()
     .collection(dbConstants?.usersCollection)
     .doc(user?.email)
-    .get()
-    .then((docData) => {
-      if (docData.exists) {
-        const userData = docData.data();
-        return userData;
-      }
-    });
+    .get();
+  if (docData.exists) {
+    const userData = docData.data();
+    return userData?.role;
+  }
 }
-
 function useProvideAuth() {
   const [userObject, setUserObject] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      console.log(user, new Date());
-
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        console.log(getRole(user));
-
-        firebase
-          .firestore()
-          .collection(dbConstants?.usersCollection)
-          .doc(user?.email)
-          .get()
-          .then((docData) => {
-            if (docData.exists) {
-              const userData = docData.data();
-              setUserObject({
-                user,
-                role: userData?.role,
-              });
-            }
-          })
-          .catch((err) => {
-            console.warn("some error occured", err);
+        await getRole(user).then((resp) => {
+          setUserObject({
+            user,
+            role: resp,
           });
+        });
       } else {
         setUserObject(null);
       }
     });
-    return unsubscribe();
+    // return unsubscribe();
   }, []);
 
   return {
     userObj: userObject,
-    userId: userObject?.user && userObject.user.uid,
-    setUserObject,
+    userId: (userObject && userObject?.user?.uid) ?? null,
   };
 }

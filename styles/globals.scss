@@ -24,7 +24,9 @@
 @font-face {
   font-family: "Silk Serif";
   src: url("../public/static/Fonts/silk Serif/Silk Serif SemiBold.otf")
-    format("truetype");
+      format("truetype"),
+    url("../public/static/Fonts/silk Serif/Silk Serif Medium.otf")
+      format("truetype");
 }
 
 html {

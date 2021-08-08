@@ -36,7 +36,7 @@ export default function Contact() {
           <Image
             src="/static/Images/ContactImg.png"
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
           />
         </div>
         <div className={styles.formContainer}>

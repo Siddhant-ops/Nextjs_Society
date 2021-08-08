@@ -3,14 +3,15 @@ import Home_UserFalse from "../Components/HomeScreen/Home_UserFalse";
 import Home_UserTrue from "../Components/HomeScreen/Home_UserTrue";
 import firebase from "firebase/app";
 import "firebase/auth";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { useState } from "react";
 import { dbConstants } from "../Utils/Firebase/Constants";
+import { Button } from "@material-ui/core";
 
 export default function Home() {
   const auth = useAuth();
 
-  console.log(auth);
+  if (auth?.userObj) return <Home_UserTrue />;
 
-  return <h1>Hello</h1>;
+  return <Home_UserFalse />;
 }

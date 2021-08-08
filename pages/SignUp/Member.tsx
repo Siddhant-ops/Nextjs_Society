@@ -98,7 +98,6 @@ const Member = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log(userSignUpInfo);
             }}
           >
             <h1>sign up</h1>

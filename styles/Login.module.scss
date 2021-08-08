@@ -52,6 +52,7 @@ $container-Bg: #f3f3f3;
 
         span {
           text-decoration: underline;
+          cursor: pointer;
         }
       }
 
@@ -72,6 +73,46 @@ $container-Bg: #f3f3f3;
         }
       }
     }
+  }
+}
+
+.resetModal {
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  border: 1px solid $brand-Black;
+  background-color: $container-Bg;
+  padding: 1rem;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  h1 {
+    text-align: center;
+    font-family: "Silk Serif", Fallback, "Open Sans";
+    font-weight: 600;
+  }
+
+  h3,
+  h5 {
+    margin: 0;
   }
 }
 

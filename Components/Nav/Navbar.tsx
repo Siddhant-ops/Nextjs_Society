@@ -30,37 +30,56 @@ const Navbar: FunctionComponent = () => {
           </IconButton>
         </div>
         <ul id="navUl">
-          <li>
-            <Link href="/About">
-              <a className={router.pathname == "/About" ? styles.active : ""}>
-                <h5>About</h5>
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/Contact">
-              <a className={router.pathname == "/Contact" ? styles.active : ""}>
-                <h5>Contact</h5>
-              </a>
-            </Link>
-          </li>
-          {auth?.userObj ? (
-            <li>
-              <Link href={`/Profile/${auth?.userObj?.user?.email}}`}>
-                <a
-                  className={
-                    router.pathname ===
-                    `/Profile/${auth?.userObj?.user?.email}}`
-                      ? styles.active
-                      : ""
-                  }
-                >
-                  <h5>Profile</h5>
-                </a>
-              </Link>
-            </li>
+          {auth?.userObj && auth?.userObj?.role === "SECRETARY" ? (
+            <Fragment>
+              <li>
+                <Link href="/Contact">
+                  <a
+                    className={
+                      router.pathname == "/Contact" ? styles.active : ""
+                    }
+                  >
+                    <h5>Contact</h5>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href={`/Profile/${auth?.userObj?.user?.email}`}>
+                  <a
+                    className={
+                      router.pathname ===
+                      `/Profile/${auth?.userObj?.user?.email}`
+                        ? styles.active
+                        : ""
+                    }
+                  >
+                    <h5>Profile</h5>
+                  </a>
+                </Link>
+              </li>
+            </Fragment>
           ) : (
             <Fragment>
+              <li>
+                <Link href="/About">
+                  <a
+                    className={router.pathname == "/About" ? styles.active : ""}
+                  >
+                    <h5>About</h5>
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/Contact">
+                  <a
+                    className={
+                      router.pathname == "/Contact" ? styles.active : ""
+                    }
+                  >
+                    <h5>Contact</h5>
+                  </a>
+                </Link>
+              </li>
               <li>
                 <Link href="/Login">
                   <a

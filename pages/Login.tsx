@@ -1,10 +1,10 @@
 import { Fragment, useState } from "react";
 import Image from "next/image";
-import { Button, TextField } from "@material-ui/core";
+import { Backdrop, Button, Fade, Modal, TextField } from "@material-ui/core";
 import styles from "../styles/Login.module.scss";
 import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import Head from "next/head";
-import { login } from "../Utils/Firebase/Auth/authHelpers";
+import { login, resetPassword } from "../Utils/Firebase/Auth/authHelpers";
 import { useRouter } from "next/router";
 
 const Login = () => {
@@ -23,16 +23,17 @@ const Login = () => {
     message: "",
   });
 
+  const [resetModal, setResetModal] = useState({
+    visible: false,
+    inputEmail: "",
+    submitted: false,
+  });
+
   // Disable Login Btn untill all fields are filled
   function disableLoginBtn(): boolean {
     const { email, password } = userLoginInfo;
     if ((email && password) === "") return true;
     else return false;
-  }
-
-  // Clear form after submission
-  function clearForm() {
-    setUserLoginInfo({ email: "", password: "" });
   }
 
   return (
@@ -53,9 +54,6 @@ const Login = () => {
             onSubmit={(e) => {
               e.preventDefault();
               login(userLoginInfo, setLoginState);
-              // setTimeout(() => {
-              //   router.push("/");
-              // }, 3000);
             }}
           >
             <h1>login</h1>
@@ -88,7 +86,16 @@ const Login = () => {
               type="password"
             />
             <h5>
-              Have you forgotten your <span>password?</span>
+              Have you forgotten your{" "}
+              <span
+                onClick={() => {
+                  setResetModal((prevResetModal) => {
+                    return { ...prevResetModal, visible: true };
+                  });
+                }}
+              >
+                password?
+              </span>
             </h5>
             <Button
               className={styles.brandBtn}
@@ -101,6 +108,64 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={resetModal?.visible}
+        onClose={() => {
+          setResetModal((prevResetModal) => {
+            return { ...prevResetModal, visible: false };
+          });
+        }}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={resetModal?.visible}>
+          <div className={styles.resetModal}>
+            <h3>We regret to hear you loose your password</h3>
+            <h5>But no worries, we will send you a link to reset it</h5>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                resetPassword(setLoginState, resetModal, setResetModal);
+              }}
+            >
+              {resetModal?.submitted ? (
+                <h1>We have sent you an email for password reset</h1>
+              ) : (
+                <Fragment>
+                  <TextField
+                    className={styles.formInput}
+                    onChange={(e) => {
+                      setResetModal((prevResetModal) => {
+                        return { ...prevResetModal, inputEmail: "" };
+                      });
+                    }}
+                    value={resetModal?.inputEmail}
+                    required
+                    fullWidth
+                    variant="outlined"
+                    label="Email"
+                    type="email"
+                  />
+                  <Button
+                    fullWidth
+                    className={styles.brandBtn}
+                    type="submit"
+                    variant="outlined"
+                    disabled={resetModal?.inputEmail === ""}
+                  >
+                    Log in
+                  </Button>
+                </Fragment>
+              )}
+            </form>
+          </div>
+        </Fade>
+      </Modal>
       {PopAlert(loginState, setLoginState)}
     </Fragment>
   );

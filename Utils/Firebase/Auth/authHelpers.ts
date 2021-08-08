@@ -281,35 +281,28 @@ const login = async (
       .then((firebaseAuthResp) => {
         if (firebaseAuthResp && firebaseAuthResp?.user) {
           const firebaseUser = firebaseAuthResp?.user;
-          console.log(firebaseUser);
-
           firebase
             .firestore()
             .collection(dbConstants?.usersCollection)
-            .doc(userData?.email)
-            .get()
-            .then((firestoreResp) => {
-              if (firestoreResp.exists) {
-                console.log("hello");
+            .doc(firebaseUser?.email)
+            .onSnapshot((snapshot) => {
+              if (snapshot.exists) {
+                setSignUpState({
+                  severity: "success",
+                  message: "login sucessful",
+                  visible: true,
+                });
+                setTimeout(() => {
+                  Router.push(`/Profile/${firebaseUser?.email}`);
+                }, 3000);
+              } else {
+                setSignUpState({
+                  severity: "info",
+                  message: "It looks like you aren't added to the group yet",
+                  visible: true,
+                });
               }
             });
-          // .onSnapshot((snapshot) => {
-          //   console.log(snapshot);
-
-          //   if (snapshot.exists) {
-          //     setSignUpState({
-          //       severity: "success",
-          //       message: "login sucessful",
-          //       visible: true,
-          //     });
-          //   } else {
-          //     setSignUpState({
-          //       severity: "info",
-          //       message: "It looks like you aren't added to the group yet",
-          //       visible: true,
-          //     });
-          //   }
-          // });
         } else {
           setSignUpState({
             severity: "error",
@@ -329,4 +322,38 @@ const login = async (
   }
 };
 
-export { signUp_Secretary, signUp_Member, login };
+const resetPassword = async (
+  setAlertState: Dispatch<SetStateAction<AlertStateType>>,
+  resetModal: {
+    visible: boolean;
+    inputEmail: string;
+    submitted: boolean;
+  },
+  setResetModal: Dispatch<
+    SetStateAction<{
+      visible: boolean;
+      inputEmail: string;
+      submitted: boolean;
+    }>
+  >
+) => {
+  await firebase
+    .auth()
+    .sendPasswordResetEmail(resetModal?.inputEmail)
+    .then(() => {
+      setResetModal((prevResetModal) => {
+        return { ...prevResetModal, inputEmail: "", submitted: true };
+      });
+    })
+    .catch((err) => {
+      if (err) {
+        setAlertState({
+          message: err?.message ?? "error is caught",
+          visible: true,
+          severity: "error",
+        });
+      }
+    });
+};
+
+export { signUp_Secretary, signUp_Member, login, resetPassword };

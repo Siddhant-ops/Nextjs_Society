@@ -1,39 +1,113 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Fragment } from "react";
 import styles from "../../styles/Home/Home_UserFalse.module.scss";
-import { getImagePath } from "../../Utils/Helpers/images";
-
+import SecurityIcon from "@material-ui/icons/Security";
+import GroupsIcon from "@material-ui/icons/Groups";
 const Home_UserFalse = () => {
   return (
     <Fragment>
       <Head>
         <title>Society Manager</title>
       </Head>
-      <div className={styles.container}>
-        {/* <Toolbar id="back-to-top-anchor" /> */}
-        <h1 className={styles.title}>Society Manager</h1>
-        <hr />
-        <h1>Featured Articles</h1>
-        <div className={styles.HeroCard}>
-          <div className={styles.HeroCardImageContainer}>
-            {/* <Image
-              className={styles.HeroCardImage}
-              src={getImagePath()}
-              layout="fill"
-              objectFit="fill"
-            /> */}
-          </div>
-          <div className={styles.HeroCardContent}>
-            {/* {quoteArray.map((quote, index) => {
-              return <h2 key={index}>{quote?.q}</h2>;
-            })} */}
+      <div className={styles.container1}>
+        <div className={styles.containerCol1}></div>
+        <div className={styles.containerCol2}>
+          <div className={styles.wrapper}>
+            <h3>What is</h3>
+            <h1>Society manager</h1>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel alias
+              molestias omnis earum modi harum fugit minus, in sint corrupti cum
+              quas quisquam a obcaecati nulla, dolorum cupiditate, asperiores
+              dolorem.
+            </p>
           </div>
         </div>
-        <h4>All Articles</h4>
-        {/* <div className={styles.CardGrid}>
-              {res.map((res: Array<object>) => some(res))}
-            </div> */}
+      </div>
+      <div className={styles.container2}>
+        <div className={styles.containerCol1}>
+          <div className={styles.wrapper}>
+            <SecurityIcon fontSize="large" />
+            <h3>What is</h3>
+            <h1>Society manager</h1>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel alias
+              molestias omnis earum modi harum fugit minus, in sint corrupti cum
+              quas quisquam a obcaecati nulla, dolorum cupiditate, asperiores
+              dolorem.
+            </p>
+          </div>
+        </div>
+        <div className={styles.containerCol2}>
+          <div className={styles.wrapper}>
+            <GroupsIcon fontSize="large" />
+            <h3>What is</h3>
+            <h1>Society manager</h1>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel alias
+              molestias omnis earum modi harum fugit minus, in sint corrupti cum
+              quas quisquam a obcaecati nulla, dolorum cupiditate, asperiores
+              dolorem.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className={styles.container3}>
+        <h3>society manager</h3>
+        <h1>for everyone</h1>
+        <h5>
+          Securing and managing a community is complex. We make it simple for:
+        </h5>
+        <div className={styles.colContainer}>
+          <div className={styles.containerCol1}>
+            <div className={styles.wrapper}>
+              <h1>1.</h1>
+              <h3>developing &</h3>
+              <h3>MANAGEMENT</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
+                alias molestias omnis earum modi harum fugit minus, in sint
+                corrupti cum quas quisquam a obcaecati nulla, dolorum
+                cupiditate, asperiores dolorem.
+              </p>
+            </div>
+          </div>
+          <div className={styles.containerCol2}>
+            <div className={styles.wrapper}>
+              <h1>2.</h1>
+              <h3>co-operative</h3>
+              <h3>MANAGEMENT</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
+                alias molestias omnis earum modi harum fugit minus, in sint
+                corrupti cum quas quisquam a obcaecati nulla, dolorum
+                cupiditate, asperiores dolorem.
+              </p>
+            </div>
+          </div>
+          <div className={styles.containerCol3}>
+            <div className={styles.wrapper}>
+              <h1>3.</h1>
+              <h3>security</h3>
+              <h3>MANAGEMENT</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
+                alias molestias omnis earum modi harum fugit minus, in sint
+                corrupti cum quas quisquam a obcaecati nulla, dolorum
+                cupiditate, asperiores dolorem.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.container4}>
+        <h3>why choose </h3>
+        <h1>society manager?</h1>
+        <h5>
+          For the very same reasons the other millions-plus homes around India
+          have chosen us
+        </h5>
+        <div className={styles.featureList}></div>
       </div>
     </Fragment>
   );
