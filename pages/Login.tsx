@@ -6,6 +6,7 @@ import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import Head from "next/head";
 import { login, resetPassword } from "../Utils/Firebase/Auth/authHelpers";
 import { useRouter } from "next/router";
+import SendIcon from "@material-ui/icons/Send";
 
 const Login = () => {
   const router = useRouter();
@@ -102,6 +103,7 @@ const Login = () => {
               type="submit"
               variant="outlined"
               disabled={disableLoginBtn()}
+              endIcon={<SendIcon />}
             >
               Log in
             </Button>
@@ -141,7 +143,10 @@ const Login = () => {
                     className={styles.formInput}
                     onChange={(e) => {
                       setResetModal((prevResetModal) => {
-                        return { ...prevResetModal, inputEmail: "" };
+                        return {
+                          ...prevResetModal,
+                          inputEmail: e.target.value,
+                        };
                       });
                     }}
                     value={resetModal?.inputEmail}

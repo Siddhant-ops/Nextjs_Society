@@ -9,6 +9,7 @@ import {
   InputLabel,
   FormControl,
 } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
 import styles from "../../styles/SignUp/Member.module.scss";
 import PopAlert, { AlertStateType } from "../../Components/Alert/PopAlert";
 import { roles } from "../../Utils/Firebase/Constants";
@@ -214,6 +215,7 @@ const Member = () => {
               type="submit"
               variant="outlined"
               disabled={disableSignUpBtn()}
+              endIcon={<SendIcon />}
             >
               Sign Up
             </Button>

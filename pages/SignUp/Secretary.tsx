@@ -80,7 +80,7 @@ const Secretary = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              signUp_Secretary(userSignUpInfo, setSignUpState, router);
+              signUp_Secretary(userSignUpInfo, setSignUpState);
             }}
           >
             <h1>Sign Up</h1>

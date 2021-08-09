@@ -1,19 +1,12 @@
-import {
-  createContext,
-  Dispatch,
-  MutableRefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import firebase from "firebase/app";
 import { firebaseApp } from "../firebase";
-import { SetStateAction } from "react";
 import { dbConstants } from "../Constants";
-import { Unsubscribe } from "@material-ui/icons";
+import nookies from "nookies";
 
 firebaseApp();
+
+export const tokenName = "next_society_vector";
 
 export interface User {
   user: firebase.User;
@@ -54,19 +47,33 @@ function useProvideAuth() {
   const [userObject, setUserObject] = useState<User | null>(null);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
+    return firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        setUserObject(null);
+        nookies.destroy(null, tokenName, { path: "/" });
+      } else {
         await getRole(user).then((resp) => {
           setUserObject({
             user,
             role: resp,
           });
+          nookies.set(null, tokenName, JSON.stringify({ user, role: resp }), {
+            path: "/",
+          });
         });
-      } else {
-        setUserObject(null);
       }
     });
-    // return unsubscribe();
+  }, []);
+
+  // force refresh the token every 10 minutes
+  useEffect(() => {
+    const handle = setInterval(async () => {
+      const user = firebase.auth().currentUser;
+      if (user) await user.getIdToken(true);
+    }, 10 * 60 * 1000);
+
+    // clean up setInterval
+    return () => clearInterval(handle);
   }, []);
 
   return {

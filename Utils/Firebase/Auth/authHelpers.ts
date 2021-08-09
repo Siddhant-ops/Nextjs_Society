@@ -3,7 +3,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { dbConstants, roles } from "../Constants";
 import { AlertStateType } from "../../../Components/Alert/PopAlert";
-import { User } from "./auth";
 import Router from "next/router";
 import {
   v5 as uuidv5,
@@ -48,11 +47,12 @@ const signUp_Secretary = async (
               .firestore()
               .collection(dbConstants?.societyCollection)
               .doc(userData?.societyName);
-            // creating a uuid
+            // creating a uuid referral code
             const socUUID = uuidv5(
               userData?.societyName,
               process.env.NEXT_PUBLIC_NAMESPACE
             );
+            // setting society fields
             societyDocRef
               .set({
                 societyId: userData?.societyId,
@@ -63,7 +63,7 @@ const signUp_Secretary = async (
               })
               .then(() => {
                 // //////////////////////////////////////////////////////
-                // Seeting first member of society in subcollection users
+                // Seting first member of society in subcollection users
                 const secretaryDocRef = societyDocRef
                   .collection(dbConstants?.userSubCollection)
                   .doc(userData?.name);
@@ -294,7 +294,7 @@ const login = async (
                 });
                 setTimeout(() => {
                   Router.push(`/Profile/${firebaseUser?.email}`);
-                }, 3000);
+                }, 2000);
               } else {
                 setSignUpState({
                   severity: "info",

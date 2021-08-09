@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../../styles/Navbar.module.scss";
+import styles from "../../styles/Navbar/Navbar.module.scss";
 import { IconButton } from "@material-ui/core";
 import { Fragment, FunctionComponent } from "react";
 import { useAuth } from "../../Utils/Firebase/Auth/auth";
