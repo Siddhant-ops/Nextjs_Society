@@ -3,9 +3,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import styles from "../../styles/Profile/Profile.module.scss";
 import { Button, IconButton } from "@material-ui/core";
-import { dbConstants } from "../../Utils/Firebase/Constants";
-import nookies from "nookies";
-import { tokenName, User } from "../../Utils/Firebase/Auth/auth";
+import { dbConstants, SocietyDoc } from "../../Utils/Firebase/Constants";
+import { CookieUser } from "../../Utils/Firebase/Auth/auth";
 import {
   AccountCircleOutlined,
   ArrowBack,
@@ -23,78 +22,15 @@ import Contact from "../../Components/Profile/Contact/Contact";
 import Society from "../../Components/Profile/Society/Society";
 import Manage from "../../Components/Profile/Manage/Manage";
 import Request from "../../Components/Profile/Request/Request";
+import { decrypt } from "../../Utils/Firebase/Auth/Helper";
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const { params } = ctx;
+interface ProfileProps {
+  accountInfo: AccountInfo;
+  societyData?: SocietyData;
+  userCountData?: UserCountData;
+}
 
-  const emailId = params?.ProfileUsername as string;
-
-  const cookies = nookies.get(ctx);
-
-  if (tokenName in cookies) {
-    const cookieToken = cookies[tokenName];
-    const token: User = JSON.parse(cookieToken);
-    if (emailId !== token?.user?.email) {
-      return {
-        notFound: true,
-      };
-    } else {
-      const userDoc = firebase
-        .firestore()
-        .collection(dbConstants?.usersCollection)
-        ?.doc(token?.user?.email);
-      const userData = (await userDoc.get()).data();
-
-      const socDoc = firebase
-        .firestore()
-        .collection(dbConstants?.societyCollection)
-        .doc(userData?.societyDocId);
-
-      const alluserData = socDoc
-        .collection(dbConstants?.userSubCollection)
-        .doc(token?.user?.displayName);
-
-      const data = (await alluserData.get()).data();
-
-      const accountInfo = {
-        name: data?.userName,
-        phoneNum: data?.userPhoneNum,
-        email: data?.userEmail,
-        accountCreated: data?.accountCreated,
-        role: token?.role,
-        flatNum: data?.societyFlatNum,
-      };
-
-      if (token?.role === "SECRETARY") {
-        const societyData = (await socDoc.get()).data();
-
-        return {
-          props: {
-            accountInfo,
-            societyData,
-          },
-        };
-      }
-
-      return {
-        props: {
-          accountInfo,
-        },
-      };
-    }
-  } else {
-    return {
-      redirect: {
-        destination: "/Login",
-        permanent: false,
-      },
-    };
-  }
-};
-
-const Profile = ({ accountInfo }) => {
+const Profile = ({ accountInfo, societyData, userCountData }: ProfileProps) => {
   const [sideBar, setSideBar] = useState({
     open: true,
     value: 0,
@@ -103,9 +39,9 @@ const Profile = ({ accountInfo }) => {
   return (
     <Fragment>
       <Head>
-        <title>Society Manager - Profile - {"emailId"}</title>
+        <title>Society Manager - Profile - {accountInfo?.email}</title>
       </Head>
-      <div id="container" className={styles.container}>
+      <div id="container" className={`${styles.container} ${styles.bg}`}>
         <div className={styles.sidebar}>
           <div className={styles.topSection}>
             <h4 hidden={!sideBar?.open}>My profile</h4>
@@ -202,7 +138,9 @@ const Profile = ({ accountInfo }) => {
         </div>
         <div className={styles.mainContainer}>
           {sideBar?.value === 0 && <Account accountInfo={accountInfo} />}
-          {sideBar?.value === 1 && <Society />}
+          {sideBar?.value === 1 && (
+            <Society societyData={societyData} userCountData={userCountData} />
+          )}
           {sideBar?.value === 2 && <Contact />}
           {sideBar?.value === 3 && <Manage />}
           {sideBar?.value === 4 && <Request />}
@@ -213,3 +151,143 @@ const Profile = ({ accountInfo }) => {
 };
 
 export default Profile;
+
+export interface AccountInfo {
+  name: string;
+  phoneNum: string;
+  email: string;
+  accountCreated: string;
+  role: string;
+  flatNum: string;
+}
+
+export interface SocietyData {
+  referralCode: string;
+  societyAddress: string;
+  societyId: string;
+  societyName: string;
+}
+
+export interface UserCountData {
+  SECRETARY: number;
+  MEMBER: number;
+  CMEMBER: number;
+  SSTAFF: number;
+  SECURITY: number;
+}
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  // get params
+  const { params } = ctx;
+
+  // get email from url
+  const emailId = params?.ProfileUsername as string;
+
+  // check if headers exists
+  if (ctx.req.headers && ctx.req.headers.cookie) {
+    // get cookie
+    const cookie = ctx.req.headers.cookie;
+    const decryptedCookie = decrypt(cookie);
+    // decrypted and parsed cookie
+    const token: CookieUser = JSON.parse(decryptedCookie);
+
+    // check if the url email matches the current signed in user email
+    if (emailId === token.user.userEmail) {
+      // soc doc
+      const socDoc = firebase
+        .firestore()
+        .collection(dbConstants?.societyCollection)
+        .doc(token.user.societyDocId);
+
+      // entire user data from soc collection
+      const alluserData = socDoc
+        .collection(dbConstants?.userSubCollection)
+        .doc(token?.user?.uid);
+
+      // userData
+      const userData = (await alluserData.get()).data();
+
+      const accountInfo = {
+        name: userData?.userName,
+        phoneNum: userData?.userPhoneNum,
+        email: userData?.userEmail,
+        accountCreated: userData?.accountCreated?.seconds,
+        role: token?.role,
+        flatNum: userData?.societyFlatNum,
+      };
+
+      // check if role of user is secretary if true then fetch additional info
+      if (token?.role === "SECRETARY") {
+        // get society Data
+        const _societyData = (await socDoc.get()).data() as SocietyDoc;
+
+        const societyData = {
+          referralCode: _societyData?.referralCode,
+          societyAddress: _societyData?.societyAddress,
+          societyId: _societyData?.societyId,
+          societyName: _societyData?.societyName,
+        };
+
+        // initializing members count
+        let userCountData = {
+          SECRETARY: 0,
+          MEMBER: 0,
+          CMEMBER: 0,
+          SSTAFF: 0,
+          SECURITY: 0,
+        };
+
+        // get members count
+        _societyData?.users.map((userObj) => {
+          switch (userObj?.role) {
+            case "SECRETARY":
+              userCountData.SECRETARY += 1;
+              break;
+            case "MEMBER":
+              userCountData.MEMBER += 1;
+              break;
+            case "CMEMBER":
+              userCountData.CMEMBER += 1;
+              break;
+            case "SSTAFF":
+              userCountData.SSTAFF += 1;
+              break;
+            case "SECURITY":
+              userCountData.SECURITY += 1;
+              break;
+
+            default:
+              break;
+          }
+        });
+
+        // send user account info, society info, and members count
+        return {
+          props: {
+            accountInfo,
+            societyData,
+            userCountData,
+          },
+        };
+      }
+
+      // if not secretary then only send account info
+      return {
+        props: {
+          accountInfo,
+        },
+      };
+    }
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    redirect: {
+      destination: "/Login",
+      permanent: false,
+    },
+  };
+};

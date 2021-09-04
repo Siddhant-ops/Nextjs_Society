@@ -1,13 +1,15 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
+import firebase from "firebase";
 import Image from "next/image";
 import styles from "../../styles/Navbar/Navbar.module.scss";
-import { IconButton } from "@material-ui/core";
-import { Fragment, FunctionComponent } from "react";
+import { Button, IconButton } from "@material-ui/core";
+import { Fragment } from "react";
 import { useAuth } from "../../Utils/Firebase/Auth/auth";
 import CircleOutlinedIcon from "@material-ui/icons/CircleOutlined";
+import { NextComponentType } from "next";
 
-const Navbar: FunctionComponent = () => {
+const Navbar: NextComponentType = () => {
   const router = useRouter();
   const auth = useAuth();
 
@@ -44,6 +46,26 @@ const Navbar: FunctionComponent = () => {
                 </Link>
               </li>
               <li>
+                <Button
+                  onClick={() => {
+                    firebase.auth().signOut();
+                  }}
+                >
+                  Log out
+                </Button>
+              </li>
+              <li>
+                <Link href="/Meet">
+                  <a
+                    className={
+                      router.pathname.includes("/Meet") ? styles.active : ""
+                    }
+                  >
+                    <h5>Meet</h5>
+                  </a>
+                </Link>
+              </li>
+              <li>
                 <Link href={`/Profile/${auth?.userObj?.user?.email}`}>
                   <a
                     className={
@@ -61,7 +83,7 @@ const Navbar: FunctionComponent = () => {
           ) : (
             <Fragment>
               <li>
-                <Link href="/About">
+                <Link href="/About#some">
                   <a
                     className={router.pathname == "/About" ? styles.active : ""}
                   >

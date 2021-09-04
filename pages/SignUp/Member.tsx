@@ -15,12 +15,12 @@ import PopAlert, { AlertStateType } from "../../Components/Alert/PopAlert";
 import { roles } from "../../Utils/Firebase/Constants";
 import Head from "next/head";
 import { signUp_Member } from "../../Utils/Firebase/Auth/authHelpers";
-import { useAuth } from "../../Utils/Firebase/Auth/auth";
+import { tokenName, useAuth, User } from "../../Utils/Firebase/Auth/auth";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import nookies from "nookies";
 
 const Member = () => {
-  const auth = useAuth();
-
-  // loginDetails
+  // SignUp Details
   const [userSignUpInfo, setUserSignUpInfo] = useState({
     name: "",
     email: "",
@@ -228,3 +228,24 @@ const Member = () => {
 };
 
 export default Member;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const cookies = nookies.get(ctx);
+  if (tokenName in cookies) {
+    const cookieToken = cookies[tokenName];
+    const token: User = JSON.parse(cookieToken);
+    if (token) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
+};

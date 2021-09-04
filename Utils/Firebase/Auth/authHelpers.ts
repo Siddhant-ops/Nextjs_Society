@@ -9,6 +9,7 @@ import {
   validate as uuidValidate,
   version as uuidVersion,
 } from "uuid";
+import { set__Cookie } from "./Helper";
 
 // Secretary SignUp
 interface SignUp_Secretary {
@@ -27,130 +28,100 @@ const signUp_Secretary = async (
   setSignUpState: Dispatch<SetStateAction<AlertStateType>>
 ) => {
   const userData = secretaryInfo;
-  // Firstly authenticate User
-  await firebase
-    .auth()
-    .createUserWithEmailAndPassword(userData?.email, userData?.password)
-    .then((firebaseAuthResp) => {
-      if (firebaseAuthResp) {
-        //   Getting secretary user
-        const secUser = firebaseAuthResp?.user;
-        // Set secretary display name
-        secUser
-          .updateProfile({
-            displayName: userData?.name,
-          })
-          .then(() => {
-            // ////////////////
-            // set society data
-            const societyDocRef = firebase
-              .firestore()
-              .collection(dbConstants?.societyCollection)
-              .doc(userData?.societyName);
-            // creating a uuid referral code
-            const socUUID = uuidv5(
-              userData?.societyName,
-              process.env.NEXT_PUBLIC_NAMESPACE
-            );
-            // setting society fields
-            societyDocRef
-              .set({
-                societyId: userData?.societyId,
-                societyName: userData?.societyName,
-                societyAddress: userData?.societyAddress,
-                users: [{ id: secUser?.uid, role: roles?.secretary }],
-                referralCode: socUUID,
-              })
-              .then(() => {
-                // //////////////////////////////////////////////////////
-                // Seting first member of society in subcollection users
-                const secretaryDocRef = societyDocRef
-                  .collection(dbConstants?.userSubCollection)
-                  .doc(userData?.name);
-                // set secretary data
-                secretaryDocRef
-                  .set({
-                    userName: userData?.name,
-                    userEmail: userData?.email,
-                    userRole: roles?.secretary,
-                    userPhoneNum: userData?.phoneNum,
-                    societyFlatNum: userData?.societyFlatNum,
-                    accountCreated: firebase.firestore.Timestamp.now(),
-                  })
-                  .then(() => {
-                    // ///////////////////////////////
-                    // setting user in Colelction user
-                    const usersDocRef = firebase
-                      .firestore()
-                      .collection(dbConstants?.usersCollection)
-                      .doc(secUser?.email);
-                    usersDocRef
-                      .set({
-                        userId: secUser?.uid,
-                        role: roles?.secretary,
-                        societyDocId: userData?.societyName,
-                      })
-                      .then(() => {
-                        setSignUpState({
-                          severity: "success",
-                          message: "Successful SignUp",
-                          visible: true,
-                        });
-                      })
-                      .catch((err) => {
-                        if (err) {
+
+  try {
+    // Firstly authenticate User
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(userData?.email, userData?.password)
+      .then((firebaseAuthResp) => {
+        if (firebaseAuthResp) {
+          //   Getting secretary user
+          const secUser = firebaseAuthResp?.user;
+          // Set secretary display name
+          secUser
+            .updateProfile({
+              displayName: userData?.name,
+            })
+            .then(() => {
+              // ////////////////
+              // set society data
+              const societyDocRef = firebase
+                .firestore()
+                .collection(dbConstants?.societyCollection)
+                .doc(userData?.societyId);
+              // creating a uuid referral code
+              const socUUID = uuidv5(
+                userData?.societyName,
+                process.env.NEXT_PUBLIC_NAMESPACE
+              );
+              // setting society fields
+              societyDocRef
+                .set({
+                  societyId: userData?.societyId,
+                  societyName: userData?.societyName,
+                  societyAddress: userData?.societyAddress,
+                  users: [{ id: secUser?.uid, role: roles?.secretary }],
+                  referralCode: socUUID,
+                })
+                .then(() => {
+                  // //////////////////////////////////////////////////////
+                  // Seting first member of society in subcollection users
+                  const secretaryDocRef = societyDocRef
+                    .collection(dbConstants?.userSubCollection)
+                    .doc(secUser?.uid);
+                  // set secretary data
+                  secretaryDocRef
+                    .set({
+                      userName: userData?.name,
+                      userEmail: userData?.email,
+                      userRole: roles?.secretary,
+                      userPhoneNum: userData?.phoneNum,
+                      societyFlatNum: userData?.societyFlatNum,
+                      accountCreated: firebase.firestore.Timestamp.now(),
+                    })
+                    .then(() => {
+                      // ///////////////////////////////
+                      // setting user in Colelction user
+                      const usersDocRef = firebase
+                        .firestore()
+                        .collection(dbConstants?.usersCollection)
+                        .doc(secUser?.uid);
+                      usersDocRef
+                        .set({
+                          email: secUser?.email,
+                          userId: secUser?.uid,
+                          role: roles?.secretary,
+                          societyDocId: userData?.societyId,
+                        })
+                        .then(async () => {
                           setSignUpState({
-                            severity: "error",
-                            message: err?.message,
+                            severity: "success",
+                            message: "Successful SignUp",
                             visible: true,
                           });
-                        }
-                      });
-                  })
-                  .catch((err) => {
-                    if (err) {
-                      setSignUpState({
-                        severity: "error",
-                        message: err?.message,
-                        visible: true,
-                      });
-                    }
-                  });
-              })
-              .catch((err) => {
-                if (err) {
-                  setSignUpState({
-                    severity: "error",
-                    message: err?.message,
-                    visible: true,
-                  });
-                }
-              });
-          })
-          .catch((err) => {
-            if (err) {
-              setSignUpState({
-                severity: "error",
-                message: err?.message,
-                visible: true,
-              });
-            }
-          });
-      }
-    })
-    .catch((err) => {
-      if (err) {
-        setSignUpState({
-          severity: "error",
-          message: err?.message,
-          visible: true,
-        });
-      }
-    });
+                          await set__Cookie(secUser);
+                          setTimeout(() => {
+                            Router.push(`/Profile/${secUser?.email}`);
+                          }, 2000);
+                        });
+                    });
+                });
+            });
+        }
+      });
+  } catch (err) {
+    if (err) {
+      setSignUpState({
+        severity: "error",
+        visible: true,
+        message: err?.message ?? "Error",
+      });
+    }
+  }
 };
 
 // Member SignUp
-
 interface SignUp_Member {
   name: string;
   phoneNum: string;
@@ -215,7 +186,7 @@ const signUp_Member = async (
                               .collection(
                                 dbConstants?.awaitingUsersSubCollection
                               )
-                              .doc(memberUser?.email);
+                              .doc(memberUser?.uid);
                             awaitMemberDocRef
                               .set({
                                 name: memberInfo?.name,
@@ -224,8 +195,9 @@ const signUp_Member = async (
                                 societyFlatNum: memberInfo?.societyFlatNum,
                                 role: memberInfo?.role,
                               })
-                              .then(() => {
+                              .then(async () => {
                                 setFormSubmitted(true);
+                                await set__Cookie(memberUser);
                                 setSignUpState({
                                   message: "Sign Up successful",
                                   severity: "success",
@@ -257,7 +229,7 @@ const signUp_Member = async (
     if (err) {
       setSignUpState({
         severity: "error",
-        message: err?.message,
+        message: err?.message ?? "Error",
         visible: true,
       });
     }
@@ -284,14 +256,15 @@ const login = async (
           firebase
             .firestore()
             .collection(dbConstants?.usersCollection)
-            .doc(firebaseUser?.email)
-            .onSnapshot((snapshot) => {
+            .doc(firebaseUser?.uid)
+            .onSnapshot(async (snapshot) => {
               if (snapshot.exists) {
                 setSignUpState({
                   severity: "success",
                   message: "login sucessful",
                   visible: true,
                 });
+                set__Cookie(firebaseUser);
                 setTimeout(() => {
                   Router.push(`/Profile/${firebaseUser?.email}`);
                 }, 2000);
@@ -315,14 +288,14 @@ const login = async (
     if (err) {
       setSignUpState({
         severity: "error",
-        message: err?.message,
+        message: err?.message ?? "Error",
         visible: true,
       });
     }
   }
 };
 
-const resetPassword = async (
+const sendResetPasswordMail = async (
   setAlertState: Dispatch<SetStateAction<AlertStateType>>,
   resetModal: {
     visible: boolean;
@@ -356,4 +329,4 @@ const resetPassword = async (
     });
 };
 
-export { signUp_Secretary, signUp_Member, login, resetPassword };
+export { signUp_Secretary, signUp_Member, login, sendResetPasswordMail };

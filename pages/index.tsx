@@ -1,17 +1,24 @@
-import { useAuth } from "../Utils/Firebase/Auth/auth";
-import Home_UserFalse from "../Components/HomeScreen/Home_UserFalse";
+import { CookieUser, tokenName, useAuth } from "../Utils/Firebase/Auth/auth";
+import Home_UserFalse from "../Components/HomeScreen/Home_UserFalse/Home_UserFalse";
 import Home_UserTrue from "../Components/HomeScreen/Home_UserTrue";
-import firebase from "firebase/app";
-import "firebase/auth";
-import { Fragment, useEffect } from "react";
-import { useState } from "react";
-import { dbConstants } from "../Utils/Firebase/Constants";
-import { Button } from "@material-ui/core";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { get__Cookie } from "../Utils/Firebase/Auth/Helper";
 
-export default function Home() {
+export default function Home({ user }: { user: CookieUser }) {
   const auth = useAuth();
-
-  if (auth?.userObj) return <Home_UserTrue />;
-
+  if (user?.user?.uid || auth.userObj?.user)
+    return <Home_UserTrue user={user} />;
   return <Home_UserFalse />;
 }
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  return await get__Cookie(ctx).then((resp) => {
+    return {
+      props: {
+        user: resp,
+      },
+    };
+  });
+};

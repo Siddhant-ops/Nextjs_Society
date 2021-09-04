@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Fragment } from "react";
-import styles from "../../styles/Home/Home_UserFalse.module.scss";
+import styles from "../../../styles/Home/Home_UserFalse.module.scss";
 import SecurityIcon from "@material-ui/icons/Security";
 import GroupsIcon from "@material-ui/icons/Groups";
 const Home_UserFalse = () => {

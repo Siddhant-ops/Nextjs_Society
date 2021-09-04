@@ -1,29 +1,66 @@
 import { Button, ButtonGroup, TextField } from "@material-ui/core";
 import { useState } from "react";
+import { AccountInfo } from "../../../pages/Profile/[ProfileUsername]";
 import styles from "../../../styles/Profile/Account.module.scss";
+import { saveProfileInfo } from "../../../Utils/Firebase/DB/dbHelpers";
+import PopAlert, { AlertStateType } from "../../Alert/PopAlert";
 
-const Account = ({ accountInfo }) => {
+const Account = ({ accountInfo }: { accountInfo: AccountInfo }) => {
+  const [edit, setEdit] = useState(false);
+
   const [userInfo, setUserInfo] = useState({
     name: accountInfo?.name,
     phoneNum: accountInfo?.phoneNum,
     email: accountInfo?.email,
     flatNumber: accountInfo?.flatNum,
+    password: "",
   });
+
+  const [updateProfileState, setUpdateProfileState] = useState<AlertStateType>({
+    severity: "info",
+    message: "",
+    visible: false,
+  });
+
+  const disableBtn = () => {
+    if (
+      !edit ||
+      (userInfo?.email &&
+        userInfo?.flatNumber &&
+        userInfo?.name &&
+        userInfo?.phoneNum) === ""
+    )
+      return true;
+  };
+
+  function toDateTime(secs) {
+    var t = new Date(Date.UTC(1970, 0, 1)); // Epoch
+    t.setUTCSeconds(secs);
+    return t;
+  }
 
   return (
     <div className={styles.container}>
       <h1>Account</h1>
+      <h5>
+        Account Created on :{" "}
+        {toDateTime(accountInfo?.accountCreated).toDateString()}
+      </h5>
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          saveProfileInfo(setUpdateProfileState, userInfo);
         }}
       >
         <TextField
+          disabled={!edit}
           className={styles.formInput}
           onChange={(e) => {
-            setUserInfo((prevUserInfo) => {
-              return { ...prevUserInfo, name: e.target.value };
-            });
+            if (edit) {
+              setUserInfo((prevUserInfo) => {
+                return { ...prevUserInfo, name: e.target.value };
+              });
+            }
           }}
           value={userInfo?.name}
           required
@@ -33,11 +70,14 @@ const Account = ({ accountInfo }) => {
           type="text"
         />
         <TextField
+          disabled={!edit}
           className={styles.formInput}
           onChange={(e) => {
-            setUserInfo((prevUserInfo) => {
-              return { ...prevUserInfo, phoneNum: e.target.value };
-            });
+            if (edit) {
+              setUserInfo((prevUserInfo) => {
+                return { ...prevUserInfo, phoneNum: e.target.value };
+              });
+            }
           }}
           value={userInfo?.phoneNum}
           required
@@ -47,11 +87,14 @@ const Account = ({ accountInfo }) => {
           type="text"
         />
         <TextField
+          disabled={!edit}
           className={styles.formInput}
           onChange={(e) => {
-            setUserInfo((prevUserInfo) => {
-              return { ...prevUserInfo, email: e.target.value };
-            });
+            if (edit) {
+              setUserInfo((prevUserInfo) => {
+                return { ...prevUserInfo, email: e.target.value };
+              });
+            }
           }}
           value={userInfo?.email}
           required
@@ -61,11 +104,14 @@ const Account = ({ accountInfo }) => {
           type="email"
         />
         <TextField
+          disabled={!edit}
           className={styles.formInput}
           onChange={(e) => {
-            setUserInfo((prevUserInfo) => {
-              return { ...prevUserInfo, flatNumber: e.target.value };
-            });
+            if (edit) {
+              setUserInfo((prevUserInfo) => {
+                return { ...prevUserInfo, flatNumber: e.target.value };
+              });
+            }
           }}
           value={userInfo?.flatNumber}
           required
@@ -74,6 +120,22 @@ const Account = ({ accountInfo }) => {
           label="Flat Number"
           type="text"
         />
+        <TextField
+          disabled={!edit}
+          className={styles.formInput}
+          onChange={(e) => {
+            if (edit) {
+              setUserInfo((prevUserInfo) => {
+                return { ...prevUserInfo, password: e.target.value };
+              });
+            }
+          }}
+          value={userInfo?.password}
+          fullWidth
+          variant="outlined"
+          label="New Password"
+          type="password"
+        />
         <ButtonGroup
           color="inherit"
           fullWidth
@@ -81,10 +143,21 @@ const Account = ({ accountInfo }) => {
           variant="outlined"
           aria-label="text button group"
         >
-          <Button>Edit</Button>
-          <Button>Save</Button>
+          <Button
+            onClick={() => {
+              setEdit((prevEdit) => {
+                return !prevEdit;
+              });
+            }}
+          >
+            {!edit ? "turn on edit" : "turn off edit"}
+          </Button>
+          <Button type="submit" disabled={disableBtn()}>
+            Save
+          </Button>
         </ButtonGroup>
       </form>
+      {PopAlert(updateProfileState, setUpdateProfileState)}
     </div>
   );
 };

@@ -1,6 +1,10 @@
 $brand-Black: #141416;
 $container-Bg: #f3f3f3;
 
+.bg {
+  background-color: red;
+}
+
 .container {
   width: 90%;
   margin: 0 auto;
@@ -29,7 +33,6 @@ $container-Bg: #f3f3f3;
 
       h4 {
         margin: 0;
-        font-family: "Aeonik", Fallback, "Open Sans";
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: capitalize;
@@ -60,7 +63,6 @@ $container-Bg: #f3f3f3;
         h4 {
           text-align: start;
           margin: 0;
-          font-family: "Aeonik", Fallback, "Open Sans";
         }
       }
     }

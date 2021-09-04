@@ -3,6 +3,9 @@ import styles from "../../styles/SignUp/index.module.scss";
 import { IconButton } from "@material-ui/core";
 import { ArrowForwardIosOutlined } from "@material-ui/icons";
 import Head from "next/head";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import nookies from "nookies";
+import { tokenName, User } from "../../Utils/Firebase/Auth/auth";
 
 const index = () => {
   return (
@@ -62,3 +65,24 @@ const index = () => {
 };
 
 export default index;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const cookies = nookies.get(ctx);
+  if (tokenName in cookies) {
+    const cookieToken = cookies[tokenName];
+    const token: User = JSON.parse(cookieToken);
+    if (token) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
+};

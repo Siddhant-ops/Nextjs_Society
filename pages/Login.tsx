@@ -4,13 +4,17 @@ import { Backdrop, Button, Fade, Modal, TextField } from "@material-ui/core";
 import styles from "../styles/Login.module.scss";
 import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import Head from "next/head";
-import { login, resetPassword } from "../Utils/Firebase/Auth/authHelpers";
+import {
+  login,
+  sendResetPasswordMail,
+} from "../Utils/Firebase/Auth/authHelpers";
 import { useRouter } from "next/router";
 import SendIcon from "@material-ui/icons/Send";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import nookies from "nookies";
+import { tokenName, User } from "../Utils/Firebase/Auth/auth";
 
 const Login = () => {
-  const router = useRouter();
-
   // loginDetails
   const [userLoginInfo, setUserLoginInfo] = useState({
     email: "",
@@ -62,7 +66,10 @@ const Login = () => {
               className={styles.formInput}
               onChange={(e) => {
                 setUserLoginInfo((prevUserLoginInfo) => {
-                  return { ...prevUserLoginInfo, email: e.target.value };
+                  return {
+                    ...prevUserLoginInfo,
+                    email: e.target.value,
+                  };
                 });
               }}
               value={userLoginInfo?.email}
@@ -132,7 +139,7 @@ const Login = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                resetPassword(setLoginState, resetModal, setResetModal);
+                sendResetPasswordMail(setLoginState, resetModal, setResetModal);
               }}
             >
               {resetModal?.submitted ? (
@@ -177,3 +184,24 @@ const Login = () => {
 };
 
 export default Login;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const cookies = nookies.get(ctx);
+  if (tokenName in cookies) {
+    const cookieToken = cookies[tokenName];
+    const token: User = JSON.parse(cookieToken);
+    if (token) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
+};

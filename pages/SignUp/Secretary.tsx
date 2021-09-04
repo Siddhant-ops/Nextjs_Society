@@ -3,17 +3,16 @@ import Image from "next/image";
 import { Button, TextField, TextareaAutosize } from "@material-ui/core";
 import styles from "../../styles/SignUp/Secretary.module.scss";
 import PopAlert, { AlertStateType } from "../../Components/Alert/PopAlert";
-import { useAuth } from "../../Utils/Firebase/Auth/auth";
+import { tokenName, useAuth, User } from "../../Utils/Firebase/Auth/auth";
 import { signUp_Secretary } from "../../Utils/Firebase/Auth/authHelpers";
 import Head from "next/head";
 import SendIcon from "@material-ui/icons/Send";
 import { useRouter } from "next/router";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import nookies from "nookies";
 
 const Secretary = () => {
-  const auth = useAuth();
-  const router = useRouter();
-
-  // loginDetails
+  // SignUp details
   const [userSignUpInfo, setUserSignUpInfo] = useState({
     name: "",
     phoneNum: "",
@@ -31,7 +30,7 @@ const Secretary = () => {
     message: "",
   });
 
-  // Disable Login Btn untill all fields are filled
+  // Disable SignUp Btn untill all fields are filled
   function disableSignUpBtn(): boolean {
     if (
       (userSignUpInfo.name &&
@@ -113,7 +112,10 @@ const Secretary = () => {
             <TextField
               onChange={(e) => {
                 setUserSignUpInfo((prevUserLoginInfo) => {
-                  return { ...prevUserLoginInfo, email: e.target.value };
+                  return {
+                    ...prevUserLoginInfo,
+                    email: e.target.value.toLowerCase(),
+                  };
                 });
               }}
               value={userSignUpInfo?.email}
@@ -217,3 +219,24 @@ const Secretary = () => {
 };
 
 export default Secretary;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const cookies = nookies.get(ctx);
+  if (tokenName in cookies) {
+    const cookieToken = cookies[tokenName];
+    const token: User = JSON.parse(cookieToken);
+    if (token) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
+};

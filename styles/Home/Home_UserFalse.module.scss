@@ -32,7 +32,6 @@ $container-Bg: #f3f3f3;
     .wrapper {
       width: 80%;
       h3 {
-        font-family: "Aeonik", Fallback, "Open Sans";
         text-transform: uppercase;
         font-weight: 500;
       }
@@ -74,7 +73,6 @@ $container-Bg: #f3f3f3;
       gap: 0.5rem;
       h3 {
         margin: 0;
-        font-family: "Aeonik", Fallback, "Open Sans";
         text-transform: uppercase;
         font-weight: 500;
       }
@@ -108,7 +106,6 @@ $container-Bg: #f3f3f3;
   }
 
   & > h3 {
-    font-family: "Aeonik", Fallback, "Open Sans";
     font-weight: 500;
     text-transform: uppercase;
   }
@@ -120,7 +117,6 @@ $container-Bg: #f3f3f3;
   }
 
   & > h5 {
-    font-family: "Aeonik", Fallback, "Open Sans";
     font-weight: 400;
   }
 
@@ -151,7 +147,6 @@ $container-Bg: #f3f3f3;
 
       h3:nth-of-type(2n-1) {
         margin: 0;
-        font-family: "Aeonik", Fallback, "Open Sans";
         font-weight: 500;
         text-transform: uppercase;
       }
@@ -183,7 +178,6 @@ $container-Bg: #f3f3f3;
   }
 
   & > h3 {
-    font-family: "Aeonik", Fallback, "Open Sans";
     font-weight: 500;
     text-transform: uppercase;
   }
@@ -195,7 +189,6 @@ $container-Bg: #f3f3f3;
   }
 
   & > h5 {
-    font-family: "Aeonik", Fallback, "Open Sans";
     font-weight: 400;
   }
 
