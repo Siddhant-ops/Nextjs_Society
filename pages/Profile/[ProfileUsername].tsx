@@ -4,7 +4,7 @@ import "firebase/auth";
 import styles from "../../styles/Profile/Profile.module.scss";
 import { Button, IconButton } from "@material-ui/core";
 import { dbConstants, SocietyDoc } from "../../Utils/Firebase/Constants";
-import { CookieUser } from "../../Utils/Firebase/Auth/auth";
+import { CookieUser, tokenName } from "../../Utils/Firebase/Auth/auth";
 import {
   AccountCircleOutlined,
   ArrowBack,
@@ -41,7 +41,7 @@ const Profile = ({ accountInfo, societyData, userCountData }: ProfileProps) => {
       <Head>
         <title>Society Manager - Profile - {accountInfo?.email}</title>
       </Head>
-      <div id="container" className={`${styles.container} ${styles.bg}`}>
+      <div id="container" className={styles.container}>
         <div className={styles.sidebar}>
           <div className={styles.topSection}>
             <h4 hidden={!sideBar?.open}>My profile</h4>
@@ -186,102 +186,112 @@ export const getServerSideProps: GetServerSideProps = async (
   const emailId = params?.ProfileUsername as string;
 
   // check if headers exists
-  if (ctx.req.headers && ctx.req.headers.cookie) {
-    // get cookie
-    const cookie = ctx.req.headers.cookie;
-    const decryptedCookie = decrypt(cookie);
-    // decrypted and parsed cookie
-    const token: CookieUser = JSON.parse(decryptedCookie);
+  if (ctx.req.cookies) {
+    const cookies = ctx.req.cookies;
 
-    // check if the url email matches the current signed in user email
-    if (emailId === token.user.userEmail) {
-      // soc doc
-      const socDoc = firebase
-        .firestore()
-        .collection(dbConstants?.societyCollection)
-        .doc(token.user.societyDocId);
+    if (tokenName in cookies) {
+      // get cookie
+      const cookie = cookies[tokenName];
+      const decryptedCookie = decrypt(cookie);
+      // decrypted and parsed cookie
+      const token: CookieUser = JSON.parse(decryptedCookie);
 
-      // entire user data from soc collection
-      const alluserData = socDoc
-        .collection(dbConstants?.userSubCollection)
-        .doc(token?.user?.uid);
+      // check if the url email matches the current signed in user email
+      if (emailId === token.user.userEmail) {
+        // soc doc
+        const socDoc = firebase
+          .firestore()
+          .collection(dbConstants?.societyCollection)
+          .doc(token.user.societyDocId);
 
-      // userData
-      const userData = (await alluserData.get()).data();
+        // entire user data from soc collection
+        const alluserData = socDoc
+          .collection(dbConstants?.userSubCollection)
+          .doc(token?.user?.uid);
 
-      const accountInfo = {
-        name: userData?.userName,
-        phoneNum: userData?.userPhoneNum,
-        email: userData?.userEmail,
-        accountCreated: userData?.accountCreated?.seconds,
-        role: token?.role,
-        flatNum: userData?.societyFlatNum,
-      };
+        // userData
+        const userData = (await alluserData.get()).data();
 
-      // check if role of user is secretary if true then fetch additional info
-      if (token?.role === "SECRETARY") {
-        // get society Data
-        const _societyData = (await socDoc.get()).data() as SocietyDoc;
-
-        const societyData = {
-          referralCode: _societyData?.referralCode,
-          societyAddress: _societyData?.societyAddress,
-          societyId: _societyData?.societyId,
-          societyName: _societyData?.societyName,
+        const accountInfo = {
+          name: userData?.userName,
+          phoneNum: userData?.userPhoneNum,
+          email: userData?.userEmail,
+          accountCreated: userData?.accountCreated?.seconds,
+          role: token?.role,
+          flatNum: userData?.societyFlatNum,
         };
 
-        // initializing members count
-        let userCountData = {
-          SECRETARY: 0,
-          MEMBER: 0,
-          CMEMBER: 0,
-          SSTAFF: 0,
-          SECURITY: 0,
-        };
+        // check if role of user is secretary if true then fetch additional info
+        if (token?.role === "SECRETARY") {
+          // get society Data
+          const _societyData = (await socDoc.get()).data() as SocietyDoc;
 
-        // get members count
-        _societyData?.users.map((userObj) => {
-          switch (userObj?.role) {
-            case "SECRETARY":
-              userCountData.SECRETARY += 1;
-              break;
-            case "MEMBER":
-              userCountData.MEMBER += 1;
-              break;
-            case "CMEMBER":
-              userCountData.CMEMBER += 1;
-              break;
-            case "SSTAFF":
-              userCountData.SSTAFF += 1;
-              break;
-            case "SECURITY":
-              userCountData.SECURITY += 1;
-              break;
+          const societyData = {
+            referralCode: _societyData?.referralCode,
+            societyAddress: _societyData?.societyAddress,
+            societyId: _societyData?.societyId,
+            societyName: _societyData?.societyName,
+          };
 
-            default:
-              break;
-          }
-        });
+          // initializing members count
+          let userCountData = {
+            SECRETARY: 0,
+            MEMBER: 0,
+            CMEMBER: 0,
+            SSTAFF: 0,
+            SECURITY: 0,
+          };
 
-        // send user account info, society info, and members count
+          // get members count
+          _societyData?.users.map((userObj) => {
+            switch (userObj?.role) {
+              case "SECRETARY":
+                userCountData.SECRETARY += 1;
+                break;
+              case "MEMBER":
+                userCountData.MEMBER += 1;
+                break;
+              case "CMEMBER":
+                userCountData.CMEMBER += 1;
+                break;
+              case "SSTAFF":
+                userCountData.SSTAFF += 1;
+                break;
+              case "SECURITY":
+                userCountData.SECURITY += 1;
+                break;
+
+              default:
+                break;
+            }
+          });
+
+          // send user account info, society info, and members count
+          return {
+            props: {
+              accountInfo,
+              societyData,
+              userCountData,
+            },
+          };
+        }
+
+        // if not secretary then only send account info
         return {
           props: {
             accountInfo,
-            societyData,
-            userCountData,
           },
         };
       }
-
-      // if not secretary then only send account info
       return {
-        props: {
-          accountInfo,
-        },
+        notFound: true,
       };
     }
     return {
-      notFound: true,
+      redirect: {
+        destination: "/Login",
+        permanent: false,
+      },
     };
   }
   return {
