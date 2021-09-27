@@ -3,7 +3,7 @@ import styles from "../../../styles/Profile/Request.module.scss";
 const Request = () => {
   return (
     <div className={styles.container}>
-      <h1>Manage Users</h1>
+      <h1>Manage Requests</h1>
       <div className={styles.itemContainer}>
         <div className={styles.itemHeader}>
           <h5>Name</h5>

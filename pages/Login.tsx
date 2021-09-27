@@ -1,6 +1,6 @@
-import { Fragment, useState } from "react";
+import { useState, Fragment } from "react";
 import Image from "next/image";
-import { Backdrop, Button, Fade, Modal, TextField } from "@material-ui/core";
+import { Backdrop, Button, Fade, Modal, TextField } from "@mui/material";
 import styles from "../styles/Login.module.scss";
 import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import Head from "next/head";
@@ -8,8 +8,7 @@ import {
   login,
   sendResetPasswordMail,
 } from "../Utils/Firebase/Auth/authHelpers";
-import { useRouter } from "next/router";
-import SendIcon from "@material-ui/icons/Send";
+import SendIcon from "@mui/icons-material/Send";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import nookies from "nookies";
 import { tokenName, User } from "../Utils/Firebase/Auth/auth";
@@ -42,7 +41,7 @@ const Login = () => {
   }
 
   return (
-    <Fragment>
+    <div className={styles.mainContainer}>
       <Head>
         <title>Society Manager - Login</title>
       </Head>
@@ -179,7 +178,7 @@ const Login = () => {
         </Fade>
       </Modal>
       {PopAlert(loginState, setLoginState)}
-    </Fragment>
+    </div>
   );
 };
 

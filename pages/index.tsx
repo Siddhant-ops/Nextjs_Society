@@ -1,6 +1,6 @@
 import { CookieUser, tokenName, useAuth } from "../Utils/Firebase/Auth/auth";
 import Home_UserFalse from "../Components/HomeScreen/Home_UserFalse/Home_UserFalse";
-import Home_UserTrue from "../Components/HomeScreen/Home_UserTrue";
+import Home_UserTrue from "../Components/HomeScreen/Home_UserTrue/Home_UserTrue";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { get__Cookie } from "../Utils/Firebase/Auth/Helper";
 

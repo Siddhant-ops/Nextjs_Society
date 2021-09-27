@@ -1,6 +1,6 @@
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
-import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
-import CalendarPicker from "@material-ui/lab/CalendarPicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import CalendarPicker from "@mui/lab/CalendarPicker";
 
 const Calendar = () => {
   return (

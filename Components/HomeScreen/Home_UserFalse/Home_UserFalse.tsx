@@ -1,11 +1,10 @@
 import Head from "next/head";
-import { Fragment } from "react";
 import styles from "../../../styles/Home/Home_UserFalse.module.scss";
-import SecurityIcon from "@material-ui/icons/Security";
-import GroupsIcon from "@material-ui/icons/Groups";
+import SecurityIcon from "@mui/icons-material/Security";
+import GroupsIcon from "@mui/icons-material/Groups";
 const Home_UserFalse = () => {
   return (
-    <Fragment>
+    <div className={styles.mainContainer}>
       <Head>
         <title>Society Manager</title>
       </Head>
@@ -109,7 +108,7 @@ const Home_UserFalse = () => {
         </h5>
         <div className={styles.featureList}></div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

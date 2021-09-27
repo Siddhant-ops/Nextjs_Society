@@ -1,4 +1,4 @@
-import { useScrollTrigger, Zoom } from "@material-ui/core";
+import { useScrollTrigger, Zoom } from "@mui/material";
 
 interface Props {
   children: React.ReactElement;

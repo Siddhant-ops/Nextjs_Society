@@ -1,27 +1,42 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import firebase from "firebase";
 import Image from "next/image";
 import styles from "../../styles/Navbar/Navbar.module.scss";
-import { Button, IconButton } from "@material-ui/core";
-import { Fragment } from "react";
+import { IconButton } from "@mui/material";
+import { Fragment, useEffect } from "react";
 import { useAuth } from "../../Utils/Firebase/Auth/auth";
-import CircleOutlinedIcon from "@material-ui/icons/CircleOutlined";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import { NextComponentType } from "next";
 
 const Navbar: NextComponentType = () => {
   const router = useRouter();
   const auth = useAuth();
 
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY >= 10) {
+        document.getElementById("nav").classList.add(styles.navFixed);
+        document.getElementById("nav").classList.remove(styles.nav);
+      } else {
+        document.getElementById("nav").classList.remove(styles.navFixed);
+        document.getElementById("nav").classList.add(styles.nav);
+      }
+    });
+    window.removeEventListener("scroll", () => {
+      if (window.scrollY >= 10) {
+        document.getElementById("nav").classList.add(styles.navFixed);
+        document.getElementById("nav").classList.remove(styles.nav);
+      } else {
+        document.getElementById("nav").classList.remove(styles.navFixed);
+        document.getElementById("nav").classList.add(styles.nav);
+      }
+    });
+  }, []);
+
   return (
-    <nav className={styles.nav}>
+    <nav id="nav" className={styles.nav}>
       <div className={styles.navContainer}>
         <div className={styles.navWrapper}>
-          <Link href="/">
-            <a className={styles.navLogoBox}>
-              <Image src="/logo_1.png" layout="fill" objectFit="contain" />
-            </a>
-          </Link>
           <IconButton
             onClick={() => {
               document.querySelector("#navUl").classList.toggle(styles.ulOpen);
@@ -30,6 +45,11 @@ const Navbar: NextComponentType = () => {
           >
             <CircleOutlinedIcon />
           </IconButton>
+          <Link href="/">
+            <a className={styles.navLogoBox}>
+              <Image src="/logo_1.png" layout="fill" objectFit="contain" />
+            </a>
+          </Link>
         </div>
         <ul id="navUl">
           {auth?.userObj && auth?.userObj?.role === "SECRETARY" ? (
@@ -45,7 +65,7 @@ const Navbar: NextComponentType = () => {
                   </a>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Button
                   onClick={() => {
                     firebase.auth().signOut();
@@ -53,7 +73,7 @@ const Navbar: NextComponentType = () => {
                 >
                   Log out
                 </Button>
-              </li>
+              </li> */}
               <li>
                 <Link href="/Meet">
                   <a
@@ -83,7 +103,7 @@ const Navbar: NextComponentType = () => {
           ) : (
             <Fragment>
               <li>
-                <Link href="/About#some">
+                <Link href="/About">
                   <a
                     className={router.pathname == "/About" ? styles.active : ""}
                   >

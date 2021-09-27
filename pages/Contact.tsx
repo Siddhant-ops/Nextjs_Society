@@ -2,9 +2,9 @@ import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import styles from "../styles/Contact.module.scss";
 import Image from "next/image";
 import { Fragment, useState } from "react";
-import { Button, TextareaAutosize, TextField } from "@material-ui/core";
+import { Button, TextareaAutosize, TextField } from "@mui/material";
 import Head from "next/head";
-import SendIcon from "@material-ui/icons/Send";
+import SendIcon from "@mui/icons-material/Send";
 
 export default function Contact() {
   const [contactForm, setContactForm] = useState({
@@ -27,14 +27,14 @@ export default function Contact() {
   }
 
   return (
-    <Fragment>
+    <div className={styles.mainContainer}>
       <Head>
         <title>Society Manager - Contact</title>
       </Head>
       <div className={styles.container}>
         <div className={styles.imgContainer}>
           <Image
-            src="/static/Images/ContactImg.png"
+            src="/static/Images/ContactImg.svg"
             layout="fill"
             objectFit="cover"
           />
@@ -96,7 +96,7 @@ export default function Contact() {
               }}
               value={contactForm?.details}
               required
-              placeholder="Society Address *"
+              placeholder="Details *"
               minRows={4}
               maxRows={10}
               className={styles.form__textArea}
@@ -114,6 +114,6 @@ export default function Contact() {
         </div>
       </div>
       {PopAlert(contactFormState, setContactFormState)}
-    </Fragment>
+    </div>
   );
 }

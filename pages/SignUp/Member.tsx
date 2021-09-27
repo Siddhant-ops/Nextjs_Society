@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import {
   Button,
@@ -8,14 +8,14 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-} from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
+} from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import styles from "../../styles/SignUp/Member.module.scss";
 import PopAlert, { AlertStateType } from "../../Components/Alert/PopAlert";
 import { roles } from "../../Utils/Firebase/Constants";
 import Head from "next/head";
 import { signUp_Member } from "../../Utils/Firebase/Auth/authHelpers";
-import { tokenName, useAuth, User } from "../../Utils/Firebase/Auth/auth";
+import { tokenName, User } from "../../Utils/Firebase/Auth/auth";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import nookies from "nookies";
 
@@ -83,14 +83,14 @@ const Member = () => {
   // Modal show awaiting invitation confirmation
 
   return (
-    <Fragment>
+    <div className={styles.mainContainer}>
       <Head>
         <title>Society Manager - SignUp - Member</title>
       </Head>
       <div className={styles.container}>
         <div className={styles.imgContainer}>
           <Image
-            src="/static/Images/MemberSignUpImage.png"
+            src="/static/Images/signUpImg.svg"
             layout="fill"
             objectFit="cover"
           />
@@ -223,7 +223,7 @@ const Member = () => {
         </div>
       </div>
       {PopAlert(signUpState, setSignUpState)}
-    </Fragment>
+    </div>
   );
 };
 

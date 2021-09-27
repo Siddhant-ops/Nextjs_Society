@@ -1,13 +1,12 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { Button, TextField, TextareaAutosize } from "@material-ui/core";
+import { Button, TextField, TextareaAutosize } from "@mui/material";
 import styles from "../../styles/SignUp/Secretary.module.scss";
 import PopAlert, { AlertStateType } from "../../Components/Alert/PopAlert";
-import { tokenName, useAuth, User } from "../../Utils/Firebase/Auth/auth";
+import { tokenName, User } from "../../Utils/Firebase/Auth/auth";
 import { signUp_Secretary } from "../../Utils/Firebase/Auth/authHelpers";
 import Head from "next/head";
-import SendIcon from "@material-ui/icons/Send";
-import { useRouter } from "next/router";
+import SendIcon from "@mui/icons-material/Send";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import nookies from "nookies";
 
@@ -63,14 +62,14 @@ const Secretary = () => {
   }
 
   return (
-    <Fragment>
+    <div className={styles.mainContainer}>
       <Head>
         <title>Society Manager - SignUp - Secretary</title>
       </Head>
       <div className={styles.container}>
         <div className={styles.imgContainer}>
           <Image
-            src="/static/Images/MemberSignUpImage.png"
+            src="/static/Images/signUpImg.svg"
             layout="fill"
             objectFit="contain"
           />
@@ -214,7 +213,7 @@ const Secretary = () => {
         </div>
       </div>
       {PopAlert(signUpState, setSignUpState)}
-    </Fragment>
+    </div>
   );
 };
 

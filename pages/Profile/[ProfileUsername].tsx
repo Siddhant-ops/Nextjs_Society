@@ -1,8 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import firebase from "firebase/app";
 import "firebase/auth";
-import styles from "../../styles/Profile/Profile.module.scss";
-import { Button, IconButton } from "@material-ui/core";
+import styles from "../../styles/Profile/index.module.scss";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import { dbConstants, SocietyDoc } from "../../Utils/Firebase/Constants";
 import { CookieUser, tokenName } from "../../Utils/Firebase/Auth/auth";
 import {
@@ -13,7 +13,7 @@ import {
   InfoOutlined,
   MarkEmailUnreadOutlined,
   PhoneOutlined,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import Head from "next/head";
 import { Fragment } from "react";
 import { useState } from "react";
@@ -64,76 +64,86 @@ const Profile = ({ accountInfo, societyData, userCountData }: ProfileProps) => {
             </IconButton>
           </div>
           <div className={styles.tabSection}>
-            <Button
-              onClick={() => {
-                setSideBar((prevSideBar) => {
-                  return { ...prevSideBar, value: 0 };
-                });
-              }}
-              className={sideBar?.value === 0 && styles.activeBtn}
-              color="inherit"
-              size="large"
-              startIcon={<AccountCircleOutlined />}
-              fullWidth={sideBar?.open}
-            >
-              {sideBar?.open ? "Account" : ""}
-            </Button>
-            <Button
-              onClick={() => {
-                setSideBar((prevSideBar) => {
-                  return { ...prevSideBar, value: 1 };
-                });
-              }}
-              className={sideBar?.value === 1 && styles.activeBtn}
-              color="inherit"
-              size="large"
-              startIcon={<InfoOutlined />}
-              fullWidth={sideBar?.open}
-            >
-              {sideBar?.open ? "Society" : ""}
-            </Button>
-            <Button
-              onClick={() => {
-                setSideBar((prevSideBar) => {
-                  return { ...prevSideBar, value: 2 };
-                });
-              }}
-              className={sideBar?.value === 2 && styles.activeBtn}
-              color="inherit"
-              size="large"
-              startIcon={<PhoneOutlined />}
-              fullWidth={sideBar?.open}
-            >
-              {sideBar?.open ? "Contact" : ""}
-            </Button>
-            <Button
-              onClick={() => {
-                setSideBar((prevSideBar) => {
-                  return { ...prevSideBar, value: 3 };
-                });
-              }}
-              className={sideBar?.value === 3 && styles.activeBtn}
-              color="inherit"
-              size="large"
-              startIcon={<GroupOutlined />}
-              fullWidth={sideBar?.open}
-            >
-              {sideBar?.open ? "Manage" : ""}
-            </Button>
-            <Button
-              onClick={() => {
-                setSideBar((prevSideBar) => {
-                  return { ...prevSideBar, value: 4 };
-                });
-              }}
-              className={sideBar?.value === 4 && styles.activeBtn}
-              color="inherit"
-              size="large"
-              startIcon={<MarkEmailUnreadOutlined />}
-              fullWidth={sideBar?.open}
-            >
-              {sideBar?.open ? "Requests" : ""}
-            </Button>
+            <Tooltip title="Profile" placement="right-start">
+              <Button
+                onClick={() => {
+                  setSideBar((prevSideBar) => {
+                    return { ...prevSideBar, value: 0 };
+                  });
+                }}
+                className={sideBar?.value === 0 && styles.activeBtn}
+                color="inherit"
+                size="large"
+                startIcon={<AccountCircleOutlined />}
+                fullWidth={sideBar?.open}
+              >
+                {sideBar?.open ? "Account" : ""}
+              </Button>
+            </Tooltip>
+            <Tooltip title="Society Info" placement="right-start">
+              <Button
+                onClick={() => {
+                  setSideBar((prevSideBar) => {
+                    return { ...prevSideBar, value: 1 };
+                  });
+                }}
+                className={sideBar?.value === 1 && styles.activeBtn}
+                color="inherit"
+                size="large"
+                startIcon={<InfoOutlined />}
+                fullWidth={sideBar?.open}
+              >
+                {sideBar?.open ? "Society" : ""}
+              </Button>
+            </Tooltip>
+            <Tooltip title="Contact" placement="right-start">
+              <Button
+                onClick={() => {
+                  setSideBar((prevSideBar) => {
+                    return { ...prevSideBar, value: 2 };
+                  });
+                }}
+                className={sideBar?.value === 2 && styles.activeBtn}
+                color="inherit"
+                size="large"
+                startIcon={<PhoneOutlined />}
+                fullWidth={sideBar?.open}
+              >
+                {sideBar?.open ? "Contact" : ""}
+              </Button>
+            </Tooltip>
+            <Tooltip title="Manage Users" placement="right-start">
+              <Button
+                onClick={() => {
+                  setSideBar((prevSideBar) => {
+                    return { ...prevSideBar, value: 3 };
+                  });
+                }}
+                className={sideBar?.value === 3 && styles.activeBtn}
+                color="inherit"
+                size="large"
+                startIcon={<GroupOutlined />}
+                fullWidth={sideBar?.open}
+              >
+                {sideBar?.open ? "Manage" : ""}
+              </Button>
+            </Tooltip>
+            <Tooltip title="Manage Requests" placement="right-start">
+              <Button
+                onClick={() => {
+                  setSideBar((prevSideBar) => {
+                    return { ...prevSideBar, value: 4 };
+                  });
+                }}
+                className={sideBar?.value === 4 && styles.activeBtn}
+                color="inherit"
+                size="large"
+                startIcon={<MarkEmailUnreadOutlined />}
+                fullWidth={sideBar?.open}
+              >
+                {sideBar?.open ? "Requests" : ""}
+              </Button>
+            </Tooltip>
           </div>
         </div>
         <div className={styles.mainContainer}>

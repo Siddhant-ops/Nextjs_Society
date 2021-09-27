@@ -3,7 +3,7 @@ import {
   ButtonGroup,
   TextareaAutosize,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 import { NextComponentType } from "next";
 import { useState } from "react";
 import {
@@ -87,13 +87,7 @@ const Society = ({
               maxRows={10}
               className={styles.form__textArea}
             />
-            <ButtonGroup
-              color="inherit"
-              fullWidth
-              size="large"
-              variant="outlined"
-              aria-label="text button group"
-            >
+            <div className={styles.btnContainer}>
               <Button
                 onClick={() => {
                   setEdit((prevEdit) => {
@@ -106,7 +100,7 @@ const Society = ({
               <Button type="submit" disabled={disableBtn()}>
                 Save
               </Button>
-            </ButtonGroup>
+            </div>
           </form>
         </div>
       </div>

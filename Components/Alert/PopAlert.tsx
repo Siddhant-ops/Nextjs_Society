@@ -3,7 +3,7 @@ import {
   SnackbarCloseReason,
   Alert,
   AlertColor,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
 interface AlertStateType {

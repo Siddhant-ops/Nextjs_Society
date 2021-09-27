@@ -1,121 +1,141 @@
 $brand-Black: #141416;
 $container-Bg: #f3f3f3;
 
-.container {
-  width: 90vw;
-  height: 90vh;
-  margin: 0 auto;
-  background-color: $container-Bg;
-  border-left: 2px solid $brand-Black;
-  border-right: 2px solid $brand-Black;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  position: relative;
-
-  .col1,
-  .col2 {
-    display: grid;
-    place-items: center;
-
-    .colContainer {
-      padding: 0.5rem;
-      width: 60%;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-
-      h4,
-      h5 {
-        margin: 0;
-      }
-
-      h1 {
-        font-family: "Silk Serif", Fallback, "Open Sans";
-        font-size: 3.5rem;
-        text-transform: uppercase;
-      }
-
-      h4 {
-        font-weight: 600;
-      }
-
-      h5 {
-        font-weight: 300;
-      }
-
-      .forwardArrowBtn {
-        border: 2px solid $brand-Black;
-      }
-    }
-  }
-
-  .col1 {
-    border-right: 1px solid $brand-Black;
-  }
-
-  .col2 {
-    border-left: 1px solid $brand-Black;
-  }
-
-  .referralCodeHintDiv {
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
-    width: 40%;
-    padding: 0.5rem;
-    background-color: #ffffff;
-    transform: translate(-5%, -5%);
-    -webkit-transform: translate(-5%, -5%);
-    -moz-transform: translate(-5%, -5%);
-    -ms-transform: translate(-5%, -5%);
-    -o-transform: translate(-5%, -5%);
-    opacity: 0;
-
-    .p {
-      font-weight: 400;
-    }
-  }
-
-  .arrow {
-    z-index: 1;
-    position: absolute;
-    bottom: 10%;
-    right: 0;
-    transform: translate(0, -12.5%);
+.mainContainer {
+  width: 100vw;
+  .container {
+    width: 90%;
+    min-height: 90vh;
+    margin: 0 auto 2rem;
+    background-color: $container-Bg;
+    border-left: 2px solid $brand-Black;
+    border-bottom: 2px solid $brand-Black;
+    border-right: 2px solid $brand-Black;
     display: flex;
-    align-items: center;
-    -webkit-transform: translate(0, -12.5%);
-    -moz-transform: translate(0, -12.5%);
-    -ms-transform: translate(0, -12.5%);
-    -o-transform: translate(0, -12.5%);
+    position: relative;
 
-    &:hover .ball {
-      transform: scale(7);
-      -webkit-transform: scale(7);
-      -moz-transform: scale(7);
-      -ms-transform: scale(7);
-      -o-transform: scale(7);
+    .col1,
+    .col2 {
+      width: 50%;
+      display: grid;
+      place-items: center;
+
+      .colContainer {
+        padding: 0.5rem;
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        h4,
+        h5 {
+          margin: 0;
+        }
+
+        h1 {
+          font-family: "Silk Serif", Fallback, "Open Sans";
+          font-size: 3.5rem;
+          text-transform: uppercase;
+        }
+
+        h4 {
+          font-weight: 600;
+        }
+
+        h5 {
+          font-weight: 300;
+        }
+
+        .forwardArrowBtn {
+          border: 2px solid $brand-Black;
+        }
+      }
     }
 
-    &:hover ~ .referralCodeHintDiv {
-      opacity: 1;
+    .col1 {
+      border-right: 1px solid $brand-Black;
     }
 
-    .ball {
-      height: 10px;
-      width: 10px;
-      border-radius: 50%;
-      -webkit-border-radius: 50%;
-      -moz-border-radius: 50%;
-      -ms-border-radius: 50%;
-      -o-border-radius: 50%;
-      background-color: $brand-Black;
+    .col2 {
+      border-left: 1px solid $brand-Black;
     }
+  }
+}
 
-    .line {
-      height: 1px;
-      width: 6rem;
-      background-color: $brand-Black;
+@media only screen and (min-width: 769px) and (max-width: 1023px) {
+  .mainContainer {
+    padding: 0 1rem;
+    .container {
+      width: 100%;
+      .col1,
+      .col2 {
+        .colContainer {
+          width: 80%;
+          h1 {
+            font-size: 3rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 769px) {
+  .mainContainer {
+    padding: 0 1rem;
+    .container {
+      height: auto;
+      width: 100%;
+      flex-direction: column;
+      .col1,
+      .col2 {
+        width: 100%;
+        border: none;
+        padding: 1rem;
+        .colContainer {
+          width: 80%;
+          h1 {
+            font-size: 2.75rem;
+          }
+        }
+      }
+
+      .col1 {
+        border-bottom: 1px solid $brand-Black;
+      }
+      .col2 {
+        border-top: 1px solid $brand-Black;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 428px) {
+  .mainContainer {
+    padding: 0 0.5rem;
+    .container {
+      height: auto;
+      width: 100%;
+      flex-direction: column;
+      .col1,
+      .col2 {
+        width: 100%;
+        border: none;
+        padding: 1rem;
+        .colContainer {
+          width: 100%;
+          h1 {
+            font-size: 2.75rem;
+          }
+        }
+      }
+
+      .col1 {
+        border-bottom: 1px solid $brand-Black;
+      }
+      .col2 {
+        border-top: 1px solid $brand-Black;
+      }
     }
   }
 }

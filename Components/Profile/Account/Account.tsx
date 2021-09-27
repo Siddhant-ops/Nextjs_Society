@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, TextField } from "@material-ui/core";
+import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useState } from "react";
 import { AccountInfo } from "../../../pages/Profile/[ProfileUsername]";
 import styles from "../../../styles/Profile/Account.module.scss";
@@ -136,13 +136,7 @@ const Account = ({ accountInfo }: { accountInfo: AccountInfo }) => {
           label="New Password"
           type="password"
         />
-        <ButtonGroup
-          color="inherit"
-          fullWidth
-          size="large"
-          variant="outlined"
-          aria-label="text button group"
-        >
+        <div className={styles.btnContainer}>
           <Button
             onClick={() => {
               setEdit((prevEdit) => {
@@ -155,7 +149,7 @@ const Account = ({ accountInfo }: { accountInfo: AccountInfo }) => {
           <Button type="submit" disabled={disableBtn()}>
             Save
           </Button>
-        </ButtonGroup>
+        </div>
       </form>
       {PopAlert(updateProfileState, setUpdateProfileState)}
     </div>

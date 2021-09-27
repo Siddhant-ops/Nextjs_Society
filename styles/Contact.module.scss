@@ -1,75 +1,79 @@
 $brand-Black: #141416;
 $container-Bg: #f3f3f3;
 
-.container {
-  width: 90vw;
-  min-height: 110vh;
-  margin: 0 auto;
-  background-color: $container-Bg;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  border-left: 2px solid $brand-Black;
-  border-right: 2px solid $brand-Black;
-
-  .imgContainer {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    border-right: 1px solid $brand-Black;
-  }
-
-  .formContainer {
-    border-left: 1px solid $brand-Black;
+.mainContainer {
+  width: 100vw;
+  .container {
+    width: 90%;
+    min-height: 110vh;
+    margin: 0 auto 2rem;
+    background-color: $container-Bg;
     display: grid;
-    place-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    border-left: 2px solid $brand-Black;
+    border-right: 2px solid $brand-Black;
+    border-bottom: 2px solid $brand-Black;
 
-    form {
-      width: 80%;
+    .imgContainer {
+      position: relative;
+      width: 100%;
       margin: 0 auto;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1.5rem;
-      border-radius: 10px;
-      -webkit-border-radius: 10px;
-      -moz-border-radius: 10px;
-      -ms-border-radius: 10px;
-      -o-border-radius: 10px;
+      border-right: 1px solid $brand-Black;
+    }
 
-      & > h1 {
-        font-size: 5rem;
-        font-family: "Silk Serif";
-        text-transform: uppercase;
-      }
+    .formContainer {
+      border-left: 1px solid $brand-Black;
+      display: grid;
+      place-items: center;
 
-      .formInput {
-        border-color: $brand-Black;
-      }
+      form {
+        width: 80%;
+        margin: 0 auto;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
 
-      .brandBtn {
-        padding: 0.7rem 4rem;
-        font-family: "Aeonik", Fallback, "Open Sans";
-        font-size: 1.25rem;
-        border-radius: 0;
-        -webkit-border-radius: 0;
-        -moz-border-radius: 0;
-        -ms-border-radius: 0;
-        -o-border-radius: 0;
-        background: $brand-Black;
-        color: $container-Bg;
-
-        &:disabled {
-          opacity: 0.85;
+        & > h1 {
+          font-size: 5rem;
+          font-family: "Silk Serif";
+          text-transform: uppercase;
         }
-      }
 
-      .form__textArea {
-        width: 100%;
-        resize: none;
-        outline: none;
-        background-color: inherit;
-        padding: 10px;
+        .formInput {
+          border-color: $brand-Black;
+        }
+
+        .brandBtn {
+          padding: 0.7rem 4rem;
+          font-family: "Aeonik", Fallback, "Open Sans";
+          font-size: 1.25rem;
+          border-radius: 0;
+          -webkit-border-radius: 0;
+          -moz-border-radius: 0;
+          -ms-border-radius: 0;
+          -o-border-radius: 0;
+          background: $brand-Black;
+          color: $container-Bg;
+
+          &:disabled {
+            opacity: 0.85;
+          }
+        }
+
+        .form__textArea {
+          width: 100%;
+          resize: none;
+          outline: none;
+          background-color: inherit;
+          padding: 10px;
+        }
       }
     }
   }
@@ -77,18 +81,91 @@ $container-Bg: #f3f3f3;
 
 // Media Queries
 
-@media only screen and (max-width: 850px) {
-  .container {
-    flex-direction: column;
-    .imgContainer {
-      width: 100%;
+@media only screen and (max-width: 1439px) {
+  .mainContainer {
+    .container {
+      .formContainer {
+        form {
+          h1 {
+            font-size: 4rem;
+          }
+        }
+      }
     }
+  }
+}
 
-    .formContainer {
-      height: 50%;
+@media only screen and (min-width: 769px) and (max-width: 1023px) {
+  .mainContainer {
+    padding: 0 1rem;
+    .container {
       width: 100%;
-      form {
+      .formContainer {
+        form {
+          h1 {
+            font-size: 3.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .mainContainer {
+    padding: 0 1rem;
+    .container {
+      width: 100%;
+      height: 200vh;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: center;
+      align-items: center;
+
+      .imgContainer,
+      .formContainer {
         width: 100%;
+        height: 50%;
+      }
+
+      .imgContainer {
+        border-right: none;
+        border-top: 1px solid $brand-Black;
+      }
+
+      .formContainer {
+        border-bottom: 1px solid $brand-Black;
+        border-left: none;
+        form {
+          padding: 1rem;
+          width: 100%;
+          h1 {
+            font-size: 3.5rem;
+            margin: 3rem 0 1.38rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 426px) {
+  .mainContainer {
+    padding: 0 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .mainContainer {
+    .container {
+      .formContainer {
+        padding: 0.5rem;
+        form {
+          padding: 0.5rem;
+          h1 {
+            font-size: 3rem;
+          }
+        }
       }
     }
   }

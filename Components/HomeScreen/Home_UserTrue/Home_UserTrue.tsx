@@ -1,10 +1,10 @@
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect } from "react";
 import { Fragment } from "react";
-import styles from "../../styles/Home/Home_UserTrue.module.scss";
-import { CookieUser } from "../../Utils/Firebase/Auth/auth";
+import styles from "../../../styles/Home/Home_UserTrue.module.scss";
+import { CookieUser } from "../../../Utils/Firebase/Auth/auth";
 
 const Home_UserTrue = ({ user }: { user: CookieUser }) => {
   useEffect(() => {
@@ -95,7 +95,7 @@ const Home_UserTrue = ({ user }: { user: CookieUser }) => {
         </form>
         <div className={styles.colContainer2}>
           <Image
-            src="/static/Images/Home/UserTrue/img1.png"
+            src="/static/Images/Home/UserTrue/img1.svg"
             layout="fill"
             objectFit="contain"
           />

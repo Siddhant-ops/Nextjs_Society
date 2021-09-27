@@ -1,22 +1,14 @@
 import styles from "../../styles/Meet/index.module.scss";
-import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
-import {
-  Button,
-  Chip,
-  Divider,
-  IconButton,
-  TextField,
-} from "@material-ui/core";
-import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
-import AdapterDateFns from "@material-ui/lab/AdapterDateFns";
-import { DesktopDateTimePicker, MobileDateTimePicker } from "@material-ui/lab";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import { Button, Chip, Divider, IconButton, TextField } from "@mui/material";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { DesktopDateTimePicker } from "@mui/lab";
 import { useState } from "react";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Link from "next/link";
+
 const index = () => {
-  const isSmallDevice = useMediaQuery("(min-width:600px)");
-  const [value, setValue] = useState<Date | null>(
-    new Date("2018-01-01T00:00:00.000Z")
-  );
+  const [value, setValue] = useState<Date | null>(new Date());
   return (
     <div className={styles.container}>
       <div className={styles.col1}>
@@ -34,7 +26,9 @@ const index = () => {
             <Button className={styles.brandBtn}>Create</Button>
           </form>
         </div>
-        <Divider style={{ width: "100%" }} />
+        <Divider style={{ width: "100%" }}>
+          <Chip label="Or" variant="outlined" />
+        </Divider>
         <div className={styles.box2}>
           <h5>Schedule</h5>
           <h3>Meeting</h3>
@@ -47,25 +41,20 @@ const index = () => {
               type="text"
             />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              {isSmallDevice ? (
-                <MobileDateTimePicker
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              ) : (
-                <DesktopDateTimePicker
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              )}
+              <DesktopDateTimePicker
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
             </LocalizationProvider>
-            <Button className={styles.brandBtn}>Create</Button>
+            <Button
+              style={{ width: "fit-content" }}
+              className={styles.brandBtn}
+            >
+              Create
+            </Button>
           </form>
         </div>
       </div>
@@ -75,9 +64,16 @@ const index = () => {
             <h3>Upcoming</h3>
             <span>
               <h1>Meetings</h1>
-              <IconButton style={{ border: "1px solid #141416" }} size="small">
-                <ArrowForwardIosOutlinedIcon />
-              </IconButton>
+              <Link href="/Meet/Upcoming">
+                <a>
+                  <IconButton
+                    style={{ border: "1px solid #141416" }}
+                    size="small"
+                  >
+                    <ArrowForwardIosOutlinedIcon />
+                  </IconButton>
+                </a>
+              </Link>
             </span>
           </div>
         </div>
@@ -86,9 +82,16 @@ const index = () => {
             <h3>Previous</h3>
             <span>
               <h1>Meetings</h1>
-              <IconButton style={{ border: "1px solid #141416" }} size="small">
-                <ArrowForwardIosOutlinedIcon />
-              </IconButton>
+              <Link href="/Meet/Previous">
+                <a>
+                  <IconButton
+                    style={{ border: "1px solid #141416" }}
+                    size="small"
+                  >
+                    <ArrowForwardIosOutlinedIcon />
+                  </IconButton>
+                </a>
+              </Link>
             </span>
           </div>
         </div>
