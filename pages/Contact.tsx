@@ -1,7 +1,7 @@
 import PopAlert, { AlertStateType } from "../Components/Alert/PopAlert";
 import styles from "../styles/Contact.module.scss";
 import Image from "next/image";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Button, TextareaAutosize, TextField } from "@mui/material";
 import Head from "next/head";
 import SendIcon from "@mui/icons-material/Send";
