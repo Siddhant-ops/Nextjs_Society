@@ -5,23 +5,23 @@ $container-Bg: #f3f3f3;
   width: 100vw;
   .container {
     width: 90%;
-    height: 90vh;
+    min-height: 110vh;
     margin: 0 auto 2rem;
     background-color: $container-Bg;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-left: 2px solid $brand-Black;
     border-right: 2px solid $brand-Black;
     border-bottom: 2px solid $brand-Black;
-    border-left: 2px solid $brand-Black;
 
     .imgContainer {
       position: relative;
-      width: 50%;
+      width: 100%;
       margin: 0 auto;
       border-right: 1px solid $brand-Black;
     }
 
     .formContainer {
-      width: 50%;
       border-left: 1px solid $brand-Black;
       display: grid;
       place-items: center;
@@ -50,15 +50,6 @@ $container-Bg: #f3f3f3;
           border-color: $brand-Black;
         }
 
-        & > h5 {
-          margin: 0;
-
-          span {
-            text-decoration: underline;
-            cursor: pointer;
-          }
-        }
-
         .brandBtn {
           padding: 0.7rem 4rem;
           font-family: "Aeonik", Fallback, "Open Sans";
@@ -75,68 +66,61 @@ $container-Bg: #f3f3f3;
             opacity: 0.85;
           }
         }
+
+        .form__textArea {
+          width: 100%;
+          resize: none;
+          outline: none;
+          background-color: inherit;
+          padding: 10px;
+        }
       }
     }
   }
+}
 
-  .resetModal {
-    width: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    border: 1px solid $brand-Black;
-    background-color: $container-Bg;
-    padding: 1rem;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+// Media Queries
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    h1 {
-      text-align: center;
-      font-family: "Silk Serif", Fallback, "Open Sans";
-      font-weight: 600;
-    }
-
-    h3,
-    h5 {
-      margin: 0;
+@media only screen and (max-width: 1439px) {
+  .mainContainer {
+    .container {
+      .formContainer {
+        form {
+          h1 {
+            font-size: 4rem;
+          }
+        }
+      }
     }
   }
 }
-// Media Queries
 
 @media only screen and (min-width: 769px) and (max-width: 1023px) {
   .mainContainer {
     padding: 0 1rem;
     .container {
       width: 100%;
+      .formContainer {
+        form {
+          h1 {
+            font-size: 3.5rem;
+          }
+        }
+      }
     }
   }
 }
 
-@media only screen and (max-width: 769px) {
+@media only screen and (max-width: 768px) {
   .mainContainer {
     padding: 0 1rem;
     .container {
       width: 100%;
       height: 200vh;
+      display: flex;
       flex-direction: column-reverse;
+      justify-content: center;
+      align-items: center;
 
       .imgContainer,
       .formContainer {
@@ -153,7 +137,12 @@ $container-Bg: #f3f3f3;
         border-bottom: 1px solid $brand-Black;
         border-left: none;
         form {
+          padding: 1rem;
           width: 100%;
+          h1 {
+            font-size: 3.5rem;
+            margin: 3rem 0 1.38rem;
+          }
         }
       }
     }
@@ -163,10 +152,19 @@ $container-Bg: #f3f3f3;
 @media only screen and (max-width: 426px) {
   .mainContainer {
     padding: 0 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .mainContainer {
     .container {
       .formContainer {
+        padding: 0.5rem;
         form {
           padding: 0.5rem;
+          h1 {
+            font-size: 3rem;
+          }
         }
       }
     }

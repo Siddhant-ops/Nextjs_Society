@@ -1,32 +1,28 @@
 import "../styles/globals.scss";
-import {
-  authReducer,
-  InitialState,
-  returnCookieValue,
-} from "../Utils/AuthContext/reducer";
-import { StateProvider } from "../Utils/AuthContext/stateProvider";
-import Navbar from "../Utils/Nav/Navbar";
-import { getCookieServerSide } from "../Utils/Helpers/auth";
+import { ProvideAuth } from "../Utils/Firebase/Auth/auth";
+import Navbar from "../Components/Nav/Navbar";
+// import type { AppProps /*, AppContext */ } from "next/app";
 
-function MyApp({ Component, pageProps, tokenCookie }) {
-  const initialState: InitialState = {
-    user: returnCookieValue(tokenCookie),
-  };
+// export function reportWebVitals(metric) {
+//   console.log(metric);
+// }
 
+function MyApp({ Component, pageProps }) {
   return (
-    <StateProvider initialState={initialState} reducer={authReducer}>
+    <ProvideAuth>
       <Navbar />
       <Component {...pageProps} />
-    </StateProvider>
+    </ProvideAuth>
   );
 }
 
-MyApp.getInitialProps = async ({ Component, ctx }) => {
-  const pageProps = Component.getInitialProps
-    ? await Component.getInitialProps(ctx)
-    : {};
-  const tokenCookie: string | null = getCookieServerSide(ctx);
-  return { pageProps, tokenCookie };
-};
+// function MyApp({ Component, pageProps }: AppProps) {
+//   return (
+//     <ProvideAuth>
+//       <Navbar />
+//       <Component {...pageProps} />
+//     </ProvideAuth>
+//   );
+// }
 
 export default MyApp;

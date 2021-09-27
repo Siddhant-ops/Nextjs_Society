@@ -1,0 +1,79 @@
+$brand-Black: #141416;
+$container-Bg: #f3f3f3;
+
+.container {
+  width: 90vw;
+  min-height: 110vh;
+  margin: 0 auto 2rem;
+  background-color: $container-Bg;
+  border-left: 2px solid $brand-Black;
+  border-right: 2px solid $brand-Black;
+  border-bottom: 2px solid $brand-Black;
+  padding: 2rem;
+
+  & > h3 {
+    margin: 0;
+  }
+
+  & > span {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    & > svg {
+      border: 1px solid $brand-Black;
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+    }
+  }
+
+  .meetingsContainer {
+    margin: 1rem 0;
+    width: 90%;
+    height: 80vh;
+    overflow-y: auto;
+    border: 2px solid $brand-Black;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+
+    .row {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      border-bottom: 1px solid $brand-Black;
+
+      & > h5 {
+        flex: 0.15;
+        &:nth-child(1) {
+          flex: 0.4;
+        }
+        margin: 0;
+      }
+    }
+
+    .rowChildren {
+      & > h5 {
+        &:nth-child(1) {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .actionBtn {
+        flex: 0.15;
+        padding: 0.5rem 0.75rem;
+        background: $brand-Black;
+        color: $container-Bg;
+      }
+    }
+  }
+}

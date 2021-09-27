@@ -1,0 +1,211 @@
+$brand-Black: #141416;
+$container-Bg: #f3f3f3;
+
+.mainContainer {
+  width: 100vw;
+  .container {
+    width: 90%;
+    height: 110vh;
+    margin: 0 auto 2rem;
+    // margin: 0 auto 2rem;
+    background-color: $container-Bg;
+    border-left: 2px solid $brand-Black;
+    border-right: 2px solid $brand-Black;
+    border-bottom: 2px solid $brand-Black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .colContainer1 {
+      width: 40%;
+      height: 100%;
+      padding: 1rem;
+      display: grid;
+      place-items: center;
+      border-right: 1px solid $brand-Black;
+
+      h1 {
+        margin: 0;
+        font-family: "Silk Serif", Fallback, "Open Sans";
+        font-size: 5.5rem;
+        transform: rotateZ(270deg);
+        -webkit-transform: rotateZ(270deg);
+        -moz-transform: rotateZ(270deg);
+        -ms-transform: rotateZ(270deg);
+        -o-transform: rotateZ(270deg);
+      }
+    }
+
+    .colContainer2 {
+      width: 60%;
+      height: 100%;
+      overflow-y: scroll;
+      display: flex;
+      border-left: 1px solid $brand-Black;
+
+      &::-webkit-scrollbar {
+        display: none;
+        background-color: #14141681;
+        width: 10px;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #141416;
+      }
+
+      .nestedCol1 {
+        width: 50%;
+        .card {
+          padding: 1rem;
+          width: 100%;
+          border-right: 2px solid $brand-Black;
+          &:not(&:last-child) {
+            border-bottom: 2px solid $brand-Black;
+          }
+
+          h2 {
+            margin: 0;
+          }
+        }
+      }
+
+      .nestedCol2 {
+        margin-top: 25vh;
+        width: 50%;
+        .card {
+          padding: 1rem;
+          width: 100%;
+          border-bottom: 2px solid $brand-Black;
+
+          h2 {
+            margin: 0;
+          }
+
+          &:nth-of-type(1) {
+            border-top: 2px solid $brand-Black;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1023px) {
+  .mainContainer {
+    padding: 0 1rem;
+    .container {
+      width: 100%;
+    }
+  }
+}
+
+@media only screen and (max-width: 769px) {
+  .mainContainer {
+    padding: 0 1rem;
+    .container {
+      width: 100%;
+      flex-direction: column;
+
+      .colContainer1 {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid $brand-Black;
+        height: auto;
+        display: block;
+        text-align: start;
+
+        & > h1 {
+          font-size: 4.5rem;
+          transform: rotateZ(0);
+          -webkit-transform: rotateZ(0);
+          -moz-transform: rotateZ(0);
+          -ms-transform: rotateZ(0);
+          -o-transform: rotateZ(0);
+        }
+      }
+
+      .colContainer2 {
+        width: 100%;
+        flex-direction: column;
+        border-left: none;
+        border-top: 1px solid $brand-Black;
+
+        .nestedCol1,
+        .nestedCol2 {
+          width: 100%;
+        }
+
+        .nestedCol1 {
+          .card {
+            border-right: none;
+          }
+        }
+
+        .nestedCol2 {
+          margin-top: 0;
+
+          .card:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 426px) {
+  .mainContainer {
+    padding: 0 0.5rem;
+    .container {
+      flex-direction: column;
+
+      .colContainer1 {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid $brand-Black;
+        justify-content: flex-start;
+
+        & > h1 {
+          font-size: 4.5rem;
+          transform: rotateZ(0);
+          -webkit-transform: rotateZ(0);
+          -moz-transform: rotateZ(0);
+          -ms-transform: rotateZ(0);
+          -o-transform: rotateZ(0);
+        }
+      }
+
+      .colContainer2 {
+        width: 100%;
+        flex-direction: column;
+        border-left: none;
+        border-top: 1px solid $brand-Black;
+
+        .nestedCol1,
+        .nestedCol2 {
+          width: 100%;
+        }
+
+        .nestedCol1 {
+          .card {
+            border-right: none;
+          }
+        }
+
+        .nestedCol2 {
+          margin-top: 0;
+
+          .card:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}

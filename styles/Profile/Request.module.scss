@@ -1,0 +1,55 @@
+$brand-Black: #141416;
+$container-Bg: #f3f3f3;
+
+.container {
+  width: 90%;
+
+  h1 {
+    font-family: "Silk Serif", Fallback, "Open Sans";
+    font-weight: 600;
+  }
+
+  .itemContainer {
+    width: 100%;
+    height: 100%;
+    border: 1px solid $brand-Black;
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+    .itemHeader {
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid $brand-Black;
+      h5 {
+        flex: 0.25;
+        margin: 0;
+
+        &:nth-child(2) {
+          flex: 0.5;
+        }
+      }
+    }
+
+    .items {
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $brand-Black;
+      }
+
+      h5 {
+        flex: 0.25;
+        margin: 0;
+
+        &:nth-child(2) {
+          flex: 0.5;
+        }
+      }
+    }
+  }
+}

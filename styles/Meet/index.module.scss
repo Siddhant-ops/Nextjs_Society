@@ -1,0 +1,112 @@
+$brand-Black: #141416;
+$container-Bg: #f3f3f3;
+
+.container {
+  width: 90vw;
+  min-height: 90vh;
+  margin: 0 auto 2rem;
+  background-color: $container-Bg;
+  border-left: 2px solid $brand-Black;
+  border-right: 2px solid $brand-Black;
+  border-bottom: 2px solid $brand-Black;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  .col1 {
+    border-right: 1px solid $brand-Black;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+
+    .box1,
+    .box2 {
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      border: 1px solid $brand-Black;
+      border-radius: 10px;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      -ms-border-radius: 10px;
+      -o-border-radius: 10px;
+
+      h3,
+      h5 {
+        margin: 0;
+      }
+
+      .brandBtn {
+        margin-top: 1rem;
+        padding: 0.3rem 2rem;
+        font-family: "Aeonik", Fallback, "Open Sans";
+        font-size: 1rem;
+        border-radius: 0;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        -ms-border-radius: 0;
+        -o-border-radius: 0;
+        background: $brand-Black;
+        color: $container-Bg;
+
+        &:disabled {
+          opacity: 0.85;
+        }
+      }
+
+      .scheduleMeeting {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+    }
+
+    .orBox {
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      p {
+        margin: 0;
+      }
+
+      .line {
+        width: 40%;
+        height: 2px;
+        background-color: $brand-Black;
+      }
+    }
+  }
+
+  .col2 {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    border-left: 1px solid $brand-Black;
+
+    .row1,
+    .row2 {
+      display: grid;
+      place-items: center;
+      h1,
+      h3 {
+        margin: 0;
+      }
+      &:is(.row1) {
+        border-bottom: 1px solid $brand-Black;
+      }
+      &:is(.row2) {
+        border-top: 1px solid $brand-Black;
+      }
+      span {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+    }
+  }
+}
